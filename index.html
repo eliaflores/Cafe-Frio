@@ -1,0 +1,653 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Café Frío Combi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: sticky header with scenario switch, then a scroll of six sections (resumen, inversión, ventas, préstamo, dónde, pendientes). Palette taken from the Café Frío deck: vino, menta, lima, cielo. */
+:root{
+  --bg:#F5EDE3; --surface:#FFFFFF; --surface2:#FBF6EF; --ink:#2B1219; --muted:#7A5F66; --line:#E4D6C8;
+  --accent:#5C2333; --accent-ink:#FFF4EA; --label:#2323D6; --field:#FFFDFA;
+  --wine:#5C2333; --wine-fg:#F7E9DC; --mint:#6EE3BA; --mint-fg:#0E2A21; --sky:#D3E2F0; --sky-fg:#1C2E42; --lime:#C9DE8D; --lime-fg:#26300F;
+  --good:#17784F; --good-bg:#D8F3E6; --warn:#8F5600; --warn-bg:#FBE7BF; --bad:#B3261E; --bad-bg:#F9D8D4;
+  --chart-line:#5C2333; --chart-area:rgba(110,227,186,.38); --chart-grid:#E4D6C8; --chart-text:#7A5F66;
+  --f-display:"Bricolage Grotesque","Inter",system-ui,sans-serif; --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1B0E13; --surface:#2A1720; --surface2:#33202A; --ink:#F6EADF; --muted:#BBA3A9; --line:#46303A;
+  --accent:#EF9FB5; --accent-ink:#2B1219; --label:#9AA6FF; --field:#22121A;
+  --wine:#6E2A3E; --wine-fg:#F7E9DC; --mint:#53D6AB; --mint-fg:#08231A; --sky:#2E4358; --sky-fg:#DCE8F4; --lime:#55662A; --lime-fg:#F0F6D8;
+  --good:#6FE0AE; --good-bg:#16382B; --warn:#F2C566; --warn-bg:#3D2E12; --bad:#FF9D94; --bad-bg:#452020;
+  --chart-line:#EF9FB5; --chart-area:rgba(83,214,171,.25); --chart-grid:#46303A; --chart-text:#BBA3A9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1B0E13; --surface:#2A1720; --surface2:#33202A; --ink:#F6EADF; --muted:#BBA3A9; --line:#46303A;
+  --accent:#EF9FB5; --accent-ink:#2B1219; --label:#9AA6FF; --field:#22121A;
+  --wine:#6E2A3E; --wine-fg:#F7E9DC; --mint:#53D6AB; --mint-fg:#08231A; --sky:#2E4358; --sky-fg:#DCE8F4; --lime:#55662A; --lime-fg:#F0F6D8;
+  --good:#6FE0AE; --good-bg:#16382B; --warn:#F2C566; --warn-bg:#3D2E12; --bad:#FF9D94; --bad-bg:#452020;
+  --chart-line:#EF9FB5; --chart-area:rgba(83,214,171,.25); --chart-grid:#46303A; --chart-text:#BBA3A9; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body);padding-inline:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+.wrap{max-width:1180px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--label);outline-offset:2px}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;font:700 20px/1 var(--f-display);letter-spacing:-.01em}
+.brand .logo{width:36px;height:36px;border-radius:10px;background:var(--wine);color:var(--wine-fg);display:grid;place-items:center}
+.brand small{display:block;font:500 11px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.nav{display:flex;gap:4px;overflow-x:auto;flex:1 1 320px;min-width:0;scrollbar-width:none}
+.nav button{border:0;background:none;padding:7px 11px;border-radius:8px;color:var(--muted);font-weight:600;white-space:nowrap}
+.nav button:hover{background:var(--surface2);color:var(--ink)}
+.seg{display:inline-flex;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--wine);color:var(--wine-fg)}
+.save{font:500 11px/1.2 var(--f-mono);color:var(--muted);display:flex;align-items:center;gap:6px}
+.save i{width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block}
+.save[data-s="ok"] i{background:var(--good)} .save[data-s="busy"] i{background:var(--warn)} .save[data-s="local"] i{background:var(--label)}
+
+/* sections */
+main{display:flex;flex-direction:column;gap:56px;padding-block:28px 64px}
+.eyebrow{font:700 11px/1.2 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--label)}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.015em}
+h2{font-size:clamp(24px,4vw,34px);line-height:1.1;font-weight:700}
+h3{font-size:17px;font-weight:700}
+.sec-h{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.sec-h p{margin:0;color:var(--muted);max-width:68ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.grid{display:grid;gap:14px}
+.muted{color:var(--muted)}
+
+/* verdict + kpis */
+.verdict{display:flex;gap:14px;align-items:flex-start;border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.verdict .ic{width:26px;height:26px;margin-top:2px}
+.verdict h3{font-size:19px}
+.verdict p{margin:2px 0 0}
+.verdict[data-s="good"]{background:var(--good-bg);color:var(--good)}
+.verdict[data-s="warn"]{background:var(--warn-bg);color:var(--warn)}
+.verdict[data-s="bad"]{background:var(--bad-bg);color:var(--bad)}
+.verdict p,.verdict h3{color:inherit}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.kpi .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.kpi .lab{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.kpi .val{font:700 clamp(24px,3vw,32px)/1.05 var(--f-display);letter-spacing:-.02em}
+.kpi .sub{font-size:12px;opacity:.85}
+.k-wine{background:var(--wine);color:var(--wine-fg)} .k-mint{background:var(--mint);color:var(--mint-fg)}
+.k-sky{background:var(--sky);color:var(--sky-fg)} .k-lime{background:var(--lime);color:var(--lime-fg)}
+.k-plain{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+
+/* stages */
+.stages{grid-template-columns:1.35fr 1fr;align-items:start}
+.stack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.stage header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.stage .tot{font:700 22px/1 var(--f-display)}
+.stage .note{margin:0 0 6px;font-size:12.5px;color:var(--muted)}
+.lines{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.line{display:grid;grid-template-columns:24px minmax(0,1fr) auto auto auto;gap:6px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.line:first-child{border-top:0}
+.line .nm{display:flex;flex-direction:column;min-width:0}
+.line .nm small{color:var(--muted);font-size:12px}
+.line>.ic{color:var(--accent)}
+.money{display:flex;align-items:center;background:var(--field);border:1px solid var(--line);border-radius:8px;padding-left:8px;width:112px}
+.money span{color:var(--muted)}
+#kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:700px){#kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){#kpis{grid-template-columns:minmax(0,1fr)}}
+.money input,.in{color:var(--ink);background:transparent;border:0;width:100%;padding:7px 8px 7px 3px;font-variant-numeric:tabular-nums;text-align:right;min-width:0}
+.in{background:var(--field);border:1px solid var(--line);border-radius:8px;padding:7px 10px;text-align:left}
+input[type=text].in{text-align:left}
+.money:focus-within,.in:focus{border-color:var(--label);outline:0}
+select.in{padding-right:6px}
+.pill{border:1px solid var(--line);background:var(--surface2);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.pill[data-s="1"]{background:var(--good-bg);color:var(--good);border-color:transparent}
+.pill[data-s="2"]{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.x{border:0;background:none;color:var(--muted);padding:2px;border-radius:6px;display:grid;place-items:center}
+.x:hover{color:var(--bad)}
+.on-wine .line>.ic{color:var(--mint)} .on-lime .line>.ic{color:inherit}
+.on-wine .line,.on-lime .line{border-top-color:rgba(255,255,255,.18)}
+.on-wine .nm small,.on-lime .nm small{color:inherit;opacity:.8}
+.add{margin-top:8px;border:1px dashed var(--line);background:none;border-radius:10px;padding:8px 12px;color:var(--accent);font-weight:600;width:100%}
+.add:hover{background:var(--surface2)}
+.bar{height:10px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--mint);border-radius:99px;transition:width .25s}
+
+/* tables */
+.tw{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;min-width:640px}
+.tbl th{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;vertical-align:middle}
+.tbl tr.sel td{background:var(--sky);color:var(--sky-fg)}
+.tbl tr.total td{font-weight:700;border-bottom:0;background:var(--surface2)}
+.tbl .in{width:100%;min-width:90px;text-align:right}
+.tbl td:first-child .in{text-align:left;min-width:130px}
+.tbl tbody tr[data-sc]{cursor:pointer}
+#scTbl{min-width:0}
+#scTbl th{white-space:normal;padding-inline:6px}
+#scTbl td{padding-inline:6px}
+#scTbl .in{min-width:56px}
+.scbtn{border:0;background:none;display:flex;align-items:center;gap:8px;font-weight:700;padding:0}
+.dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--muted);display:inline-block;flex:none}
+tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
+.neg{color:var(--bad)}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700}
+.chip.good{background:var(--good-bg);color:var(--good)} .chip.warn{background:var(--warn-bg);color:var(--warn)} .chip.bad{background:var(--bad-bg);color:var(--bad)}
+
+/* ventas */
+.two{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);align-items:start}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fields label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+.fields label span.l{font-weight:600}
+.fields .in{text-align:right;color:var(--ink)}
+.fields .wide{grid-column:1/-1}
+.hint{font-size:12px;color:var(--muted);margin:0}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--chart-text);font:500 11px var(--f-mono)}
+.chart .g{stroke:var(--chart-grid);stroke-width:1}
+.chart .ln{fill:none;stroke:var(--chart-line);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.chart .ln2{fill:none;stroke:var(--label);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.chart .ar{fill:var(--chart-area);stroke:none}
+.chart .tg{stroke:var(--label);stroke-width:1.5;stroke-dasharray:5 4}
+.chart .pt{fill:var(--mint);stroke:var(--chart-line);stroke-width:2}
+.chart .b{fill:var(--chart-line);opacity:.45} .chart .b.on{opacity:1}
+.chart .bn{fill:var(--bad)}
+.chart .lbl{fill:var(--ink);font-weight:700}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:6px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:3px;margin-right:6px;vertical-align:middle}
+
+/* where + todo */
+.cols3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.spot{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.spot:first-of-type{border-top:0}
+.spot .ic{color:var(--accent)}
+.spot span.n{flex:1;min-width:0}
+.grp h3{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.grp .ic{color:var(--label)}
+.addrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.addrow .in{flex:1 1 180px;min-width:0}
+.btn{border:0;background:var(--wine);color:var(--wine-fg);border-radius:10px;padding:8px 14px;font-weight:600}
+.btn:hover{filter:brightness(1.1)}
+.todo{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.todo:first-child{border-top:0}
+.todo input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:var(--wine);flex:none}
+.todo label{flex:1;min-width:0}
+.todo input:checked+label{color:var(--muted);text-decoration:line-through}
+.foot{color:var(--muted);font-size:12px;max-width:80ch}
+.legendbox{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted)}
+.swatch{display:inline-block;width:28px;height:18px;border-radius:5px;background:var(--field);border:1px solid var(--line);vertical-align:middle;margin-right:6px}
+
+.grid>*,.stack>*{min-width:0}
+@media (max-width:860px){.stages,.two{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){
+  .line{grid-template-columns:24px minmax(0,1fr) auto}
+  .line .money{grid-column:2/3;grid-row:2;width:100%}
+  .line .pill{grid-column:3;grid-row:2}
+  .line .x{grid-column:3;grid-row:1}
+  main{gap:44px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar>i{transition:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-van" viewBox="0 0 24 24"><path d="M3 17V8a2 2 0 0 1 2-2h8.5a2 2 0 0 1 1.6.8L19 11.5l2 1V17"/><path d="M3 17h2m4 0h6m4 0h2"/><circle cx="7" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/><path d="M13 6v5.5h6"/></symbol>
+<symbol id="i-cup" viewBox="0 0 24 24"><path d="M5 8h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5V8z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M9 3v2M13 3v2"/></symbol>
+<symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.4 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1.1 2-2.5 2c-1.1 0-2-.5-2.5-1.5M12 6.5V8m0 8v1.5"/></symbol>
+<symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L11 20a2.1 2.1 0 0 1-3-3l8.7-8.7z"/><path d="M14.5 5.5 18 2l2 2-3.5 3.5"/></symbol>
+<symbol id="i-fridge" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M6 10h12M9 6v2M9 13v3"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-11h-6l1-9z"/></symbol>
+<symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></symbol>
+<symbol id="i-roller" viewBox="0 0 24 24"><rect x="4" y="3" width="14" height="6" rx="1.5"/><path d="M18 6h2v5h-8v3"/><rect x="10.5" y="14" width="3" height="7" rx="1"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l2 5.5L19.5 10 14 12l-2 5.5L10 12l-5.5-2L10 8.5z"/><path d="M19 17v4M17 19h4"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 21v-6"/><path d="M12 3a5 5 0 0 0-4 8 4 4 0 0 0 1 7h6a4 4 0 0 0 1-7 5 5 0 0 0-4-8z"/></symbol>
+<symbol id="i-road" viewBox="0 0 24 24"><path d="M8 3 4 21M16 3l4 18M12 4v3M12 10v4M12 17v3"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2A5 5 0 0 1 21 19.5"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v5M12 17.5v.5"/></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></symbol>
+<symbol id="i-return" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v4h4"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21h4"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="i-gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></symbol>
+</svg>
+
+<header class="top"><div class="wrap">
+  <div class="brand"><span class="logo"><svg class="ic"><use href="#i-van"/></svg></span><div>Café Frío<small>Combi · plan de inversión</small></div></div>
+  <nav class="nav" aria-label="Secciones">
+    <button type="button" data-go="resumen">Resumen</button><button type="button" data-go="inversion">Inversión</button><button type="button" data-go="ventas">Ventas</button><button type="button" data-go="prestamo">Préstamo</button><button type="button" data-go="donde">Dónde</button><button type="button" data-go="pendientes">Pendientes</button>
+  </nav>
+  <div class="seg" id="segTop" role="group" aria-label="Escenario de ventas"></div>
+  <div class="save" id="save" data-s="local" role="status"><i></i><span>Solo en este dispositivo</span></div>
+</div></header>
+
+<div class="wrap"><main>
+
+<section id="resumen">
+  <div class="sec-h">
+    <span class="eyebrow">Resumen · cifras del PDF de noviembre 2026</span>
+    <h2>¿Vale la pena la combi de <span data-o="combiAmt">$54,000</span>?</h2>
+    <p>Edita cualquier celda con fondo claro y todo se recalcula. Elige un escenario arriba para ver qué pasa si venden más o menos.</p>
+  </div>
+  <div class="verdict" id="verdict" data-s="good"><svg class="ic"><use href="#i-trend"/></svg><div><h3 id="vTitle"></h3><p id="vText"></p></div></div>
+  <div class="grid kpis" id="kpis"></div>
+  <p class="legendbox" style="margin-top:14px"><span><span class="swatch"></span>Celda que puedes editar</span><span>Lo demás se calcula solo.</span></p>
+</section>
+
+<section id="inversion">
+  <div class="sec-h">
+    <span class="eyebrow">Inversión por etapas</span>
+    <h2>Empezar con lo mínimo y sumar imagen después</h2>
+    <p>La etapa 1 se paga con las aportaciones. Las etapas 2 y 3 salen de las primeras ventas. Marca "Pagado" cada gasto que ya hicieron.</p>
+  </div>
+  <div class="grid stages">
+    <article class="card stage" id="st1">
+      <header><span class="eyebrow">Etapa 1 · Comprar y equipar</span><span class="tot num" data-o="t1"></span></header>
+      <ul class="lines" id="lines1"></ul>
+      <button class="add" type="button" data-act="addItem" data-stage="1">+ Agregar gasto a la etapa 1</button>
+      <div class="fields" style="margin-top:14px"><label class="wide"><span class="l">Imprevistos sobre la etapa 1 (%)</span><input class="in num" type="number" min="0" max="50" step="1" data-k="imprev" id="f-imprev"></label>
+      <p class="hint wide">El PDF no incluye imprevistos. En un vehículo usado conviene dejar un colchón.</p></div>
+    </article>
+    <div class="stack">
+      <article class="card stage on-wine" style="background:var(--wine);color:var(--wine-fg);border-color:transparent">
+        <header><span class="eyebrow" style="color:var(--mint)">Etapa 2 · Mes 1 a 3</span><span class="tot num" data-o="t2"></span></header>
+        <p class="note" style="color:inherit;opacity:.85">Ideal antes de salir. Si no alcanza, se hace con las primeras ventas.</p>
+        <ul class="lines" id="lines2"></ul>
+        <button class="add" type="button" data-act="addItem" data-stage="2" style="color:inherit">+ Agregar gasto</button>
+      </article>
+      <article class="card stage on-lime" style="background:var(--lime);color:var(--lime-fg);border-color:transparent">
+        <header><span class="eyebrow" style="color:inherit">Etapa 3 · Mes 3 a 6</span><span class="tot num" data-o="t3"></span></header>
+        <p class="note" style="color:inherit;opacity:.85">Pingüinos y detalles de marca.</p>
+        <ul class="lines" id="lines3"></ul>
+        <button class="add" type="button" data-act="addItem" data-stage="3" style="color:inherit">+ Agregar gasto</button>
+      </article>
+      <article class="card">
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px"><strong>Avance de pagos</strong><span class="num" data-o="paidTxt"></span></div>
+        <div class="bar" role="progressbar" aria-label="Gastos pagados"><i id="paidBar" style="width:0"></i></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="ventas">
+  <div class="sec-h">
+    <span class="eyebrow">ROI realista</span>
+    <h2>Cuánto vende de más que el puesto</h2>
+    <p>Todo se mide contra lo que ya vende el puesto. Lo que cuenta es la utilidad extra después de pagar el gasto extra de la combi.</p>
+  </div>
+  <div class="grid two">
+    <div class="card"><h3 style="margin-bottom:12px">Supuestos</h3>
+      <div class="fields">
+        <label><span class="l">Precio por vaso ($)</span><input class="in num" type="number" min="0" step="1" data-k="price" id="f-price"></label>
+        <label><span class="l">Costo por vaso ($)</span><input class="in num" type="number" min="0" step="1" data-k="cost" id="f-cost"></label>
+        <label><span class="l">Gasto extra al mes ($)</span><input class="in num" type="number" min="0" step="100" data-k="extra" id="f-extra"></label>
+        <label><span class="l">Días de venta al mes</span><input class="in num" type="number" min="1" max="31" step="1" data-k="days" id="f-days"></label>
+        <label><span class="l">Bebidas por evento</span><input class="in num" type="number" min="0" step="10" data-k="evQty" id="f-evQty"></label>
+        <label><span class="l">Cobro por evento ($)</span><input class="in num" type="number" min="0" step="100" data-k="evPrice" id="f-evPrice"></label>
+        <label><span class="l">Descuento por comisión (%)</span><input class="in num" type="number" min="0" max="20" step="0.1" data-k="fee" id="f-fee"></label>
+        <label><span class="l">Ventas nov a feb (% de lo normal)</span><input class="in num" type="number" min="30" max="150" step="5" data-k="winter" id="f-winter"></label>
+        <p class="hint wide">Gasto extra: gasolina, mantenimiento, energía y piso. El descuento por comisión está calibrado para que la tabla coincida con la del PDF. El PDF menciona 80% en invierno, pero su tabla no lo aplica.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
+        <div style="display:flex;justify-content:space-between"><span class="muted">Margen por vaso</span><strong class="num" data-o="gross"></strong></div>
+        <div style="display:flex;justify-content:space-between"><span class="muted">Margen después de comisión</span><strong class="num" data-o="net"></strong></div>
+        <div style="display:flex;justify-content:space-between"><span class="muted">Utilidad por evento</span><strong class="num" data-o="evp"></strong></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card"><h3 style="margin-bottom:8px">Escenarios</h3>
+        <div class="tw"><table class="tbl" id="scTbl"><thead><tr><th>Escenario</th><th>Vasos extra/día</th><th>Eventos/mes</th><th>Venta extra/mes</th><th>Utilidad extra/mes</th><th>Recupera etapa 1</th></tr></thead><tbody id="scBody"></tbody></table></div>
+        <p class="hint" style="margin-top:8px">Toca un escenario para activarlo. Evento privado: 80 bebidas por $4,500 según el PDF.</p>
+      </div>
+      <div class="card"><h3 style="margin-bottom:4px">Utilidad extra al mes por escenario</h3><div id="chScen"></div></div>
+    </div>
+  </div>
+  <div class="grid two" style="margin-top:14px">
+    <div class="card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><svg class="ic" style="color:var(--label)"><use href="#i-bell"/></svg><h3>Regla de alarma</h3></div>
+      <p style="margin:0 0 12px">Si a los 2 meses no venden al menos <strong class="num" data-o="alarmN">10</strong> vasos más al día que el puesto, se cambia de punto o se empujan eventos.</p>
+      <div class="fields">
+        <label><span class="l">Ventas del puesto hoy (vasos/día)</span><input class="in num" type="number" min="0" step="1" data-k="current" id="f-current" placeholder="Dato que falta"></label>
+        <label><span class="l">Vasos extra/día que llevan</span><input class="in num" type="number" min="0" step="1" data-k="actual" id="f-actual" placeholder="Después de 2 meses"></label>
+      </div>
+      <p style="margin:12px 0 0" id="alarmOut"></p>
+    </div>
+    <div class="card"><h3 style="margin-bottom:4px">¿Cuándo se recupera la etapa 1?</h3><p class="hint" style="margin-bottom:6px">Utilidad extra acumulada del escenario activo contra el total de la etapa 1.</p><div id="chPay"></div></div>
+  </div>
+</section>
+
+<section id="prestamo">
+  <div class="sec-h">
+    <span class="eyebrow">Aportaciones y devolución</span>
+    <h2>Un préstamo de amigos, con reglas claras</h2>
+    <p>Los socios prestan y el negocio sigue siendo de los dueños. Se devuelve lo prestado más el interés pactado, con una parte de la utilidad extra.</p>
+  </div>
+  <div class="grid kpis" id="loanKpis" style="margin-bottom:14px"></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="fields" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+      <label><span class="l">Interés del préstamo (%)</span><input class="in num" type="number" min="0" max="100" step="0.5" data-k="rate" id="f-rate"></label>
+      <label><span class="l">% de la utilidad extra que paga el préstamo</span><input class="in num" type="number" min="1" max="100" step="5" data-k="share" id="f-share"></label>
+      <label><span class="l">Mes de arranque</span><select class="in" data-k="startM" id="f-startM"></select></label>
+      <label><span class="l">Año de arranque</span><input class="in num" type="number" min="2026" max="2035" step="1" data-k="startY" id="f-startY"></label>
+    </div>
+    <p class="hint" style="margin-top:10px">La otra parte de la utilidad extra paga la pintura y los detalles (etapas 2 y 3). Cuando una de las dos terminó, su parte pasa a la otra.</p>
+  </div>
+  <div class="card" style="margin-bottom:14px"><h3 style="margin-bottom:8px">Quién pone cuánto</h3>
+    <div class="tw"><table class="tbl" id="pTbl"><thead><tr><th>Persona</th><th>Tipo</th><th>Aporta</th><th>Recibe en total</th><th>Pago mensual aprox.</th><th>Termina</th><th></th></tr></thead><tbody id="pBody"></tbody><tfoot id="pFoot"></tfoot></table></div>
+    <button class="add" type="button" data-act="addPerson">+ Agregar persona</button>
+  </div>
+  <div class="grid two" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="card"><h3 style="margin-bottom:4px">Lo que falta por pagar</h3><div class="legend"><span><i style="background:var(--chart-line)"></i>Préstamo a los amigos</span><span><i style="background:var(--label)"></i>Pintura y detalles</span></div><div id="chBal"></div></div>
+    <div class="card"><h3 style="margin-bottom:8px">Mes a mes</h3><div class="tw" style="max-height:340px;overflow-y:auto"><table class="tbl" style="min-width:560px"><thead><tr><th>Mes</th><th>Utilidad extra</th><th>A préstamo</th><th>A pintura y detalles</th><th>Libre</th></tr></thead><tbody id="mBody"></tbody></table></div></div>
+  </div>
+</section>
+
+<section id="donde">
+  <div class="sec-h">
+    <span class="eyebrow">Dónde ponernos</span>
+    <h2>Parques, calles y colonias grandes</h2>
+    <p>Ubicaciones a grandes rasgos. Cada punto se valida con el dueño del predio o el organizador antes de contarlo.</p>
+  </div>
+  <div class="grid cols3" id="spots"></div>
+  <div class="card" style="margin-top:14px"><div class="addrow" style="margin-top:0"><input class="in" type="text" id="spotName" placeholder="Otro lugar para validar" aria-label="Nombre del lugar"><select class="in" id="spotGrp" aria-label="Tipo de lugar"><option value="park">Parque</option><option value="street">Calle concurrida</option><option value="colonia">Colonia</option></select><button class="btn" type="button" data-act="addSpot">Agregar</button></div></div>
+</section>
+
+<section id="pendientes">
+  <div class="sec-h">
+    <span class="eyebrow">Antes de comprar y abrir</span>
+    <h2>Pendientes</h2>
+    <p>Lo primero es revisar la combi con un mecánico de VW, confirmar papeles, cotizar la pintura y dejar por escrito cuánto pone cada quien y cómo se devuelve.</p>
+  </div>
+  <div class="card"><div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px"><strong>Avance</strong><span class="num" data-o="todoTxt"></span></div><div class="bar" style="margin-bottom:10px"><i id="todoBar" style="width:0"></i></div><div id="todos"></div>
+    <div class="addrow"><input class="in" type="text" id="todoName" placeholder="Nuevo pendiente" aria-label="Nuevo pendiente"><button class="btn" type="button" data-act="addTodo">Agregar</button></div></div>
+</section>
+
+<p class="foot">Estimaciones basadas en el PDF "Del puestito a la combi" (noviembre 2026) y en tus datos. Los números se afinan con las ventas reales del puesto. Los montos de permisos y cafetera quedan en cero hasta que los cotices. Propuesta para platicar, no es asesoría legal ni financiera.</p>
+</main></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var MES=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"], WINTER=[10,11,0,1];
+var nf=new Intl.NumberFormat("es-MX",{maximumFractionDigits:0});
+function fmt(n){return (n<0?"−":"")+"$"+nf.format(Math.abs(Math.round(n)))}
+function f1(n){return (Math.round(n*10)/10).toString().replace(".",",")}
+function kf(v){var a=Math.abs(v);return (v<0?"−":"")+"$"+(a>=1000?f1(a/1000)+"k":Math.round(a))}
+function num(v){var n=parseFloat(v);return isFinite(n)?n:0}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function uid(){return Math.random().toString(36).slice(2,8)}
+function months(x){if(!isFinite(x))return "Nunca";if(x>60)return "Más de 5 años";return f1(x)+(Math.round(x*10)/10===1?" mes":" meses")}
+function ic(n){return '<svg class="ic" aria-hidden="true"><use href="#i-'+n+'"/></svg>'}
+function label(k){var i=S.startM-1+k-1;return MES[i%12]+" "+(S.startY+Math.floor(i/12))}
+
+var DEF={
+ scenario:1, price:65, cost:22, fee:4.41, extra:5000, days:12, evQty:80, evPrice:4500, winter:100, imprev:0, current:"", actual:"",
+ scen:[{n:"Conservador",cups:15,ev:0},{n:"Base",cups:35,ev:1},{n:"Optimista",cups:60,ev:3}],
+ rate:10, share:50, startM:1, startY:2027,
+ items:[
+  {id:"combi",stage:1,name:"Combi del post",amt:54000,st:0,ic:"van"},
+  {id:"tram",stage:1,name:"Cambio de propietario, placas y seguro",amt:4500,st:0,ic:"file"},
+  {id:"mec",stage:1,name:"Afinación y revisión mecánica",amt:4500,st:0,ic:"wrench"},
+  {id:"refri",stage:1,name:"Refri (el que ya vieron)",amt:3000,st:0,ic:"fridge"},
+  {id:"inv",stage:1,name:"Inversor + batería o generador chico",amt:6500,st:0,ic:"bolt"},
+  {id:"tarja",stage:1,name:"Tarja con bomba para garrafón",amt:2500,st:0,ic:"drop"},
+  {id:"cafe",stage:1,name:"Cafetera para café caliente",amt:0,st:0,ic:"cup",note:"No viene en el PDF. Pon 15,000 si la compran."},
+  {id:"perm",stage:1,name:"Permisos de vía pública, sanidad y Protección Civil",amt:0,st:0,ic:"file",note:"Por cotizar con el Municipio."},
+  {id:"pint",stage:2,name:"Pintura dos tonos",amt:18000,st:0,ic:"roller"},
+  {id:"ping",stage:3,name:"Vinil de stickers, logo y caballete",amt:9500,st:0,ic:"spark"}
+ ],
+ people:[
+  {id:"p1",name:"Maggie y Joaquín",kind:"dueno",amt:30000},{id:"p2",name:"Diego",kind:"prestamo",amt:10000},
+  {id:"p3",name:"Elia",kind:"prestamo",amt:10000},{id:"p4",name:"Kike",kind:"prestamo",amt:7500},
+  {id:"p5",name:"Amaya",kind:"prestamo",amt:7500},{id:"p6",name:"Adrián",kind:"prestamo",amt:7500}
+ ],
+ spots:[
+  {id:"s1",grp:"park",name:"El Palomar",st:0},{id:"s2",grp:"park",name:"Parque Lerdo",st:0},{id:"s3",grp:"park",name:"Presa El Rejón",st:0},
+  {id:"s4",grp:"street",name:"Av. Tecnológico",st:0},{id:"s5",grp:"street",name:"Centro, Calle Libertad",st:0},
+  {id:"s6",grp:"colonia",name:"Riberas del Sacramento",st:0},{id:"s7",grp:"colonia",name:"Las Granjas",st:0},{id:"s8",grp:"colonia",name:"San Felipe",st:0},
+  {id:"s9",grp:"colonia",name:"Quintas del Sol",st:0},{id:"s10",grp:"colonia",name:"Villa Juárez",st:0}
+ ],
+ todo:[
+  {id:"t1",t:"Revisar la combi con un mecánico de VW",done:false},
+  {id:"t2",t:"Confirmar papeles: factura, adeudos y multas",done:false},
+  {id:"t3",t:"Cotizar la pintura dos tonos",done:false},
+  {id:"t4",t:"Apuntar por escrito cuánto pone cada quien y cómo se devuelve",done:false},
+  {id:"t5",t:"Preguntar al Municipio qué permiso aplica a una combi y en qué zonas se puede",done:false},
+  {id:"t6",t:"Aviso sanitario y revisión de Protección Civil",done:false},
+  {id:"t7",t:"Confirmar si el seguro cubre uso comercial",done:false},
+  {id:"t8",t:"Decidir si compran cafetera para café caliente y cotizarla",done:false},
+  {id:"t9",t:"Anotar las ventas actuales del puesto (dato que falta)",done:false}
+ ]
+};
+var S=JSON.parse(JSON.stringify(DEF)), KEY="cafefrio-combi-v2";
+function merge(src){var o=JSON.parse(JSON.stringify(DEF));if(src&&typeof src==="object"){Object.keys(DEF).forEach(function(k){if(src[k]!==undefined&&src[k]!==null)o[k]=src[k]})}return o}
+try{var raw=localStorage.getItem(KEY);if(raw)S=merge(JSON.parse(raw))}catch(e){}
+
+/* ---------- model ---------- */
+var M={};
+function calc(){
+  var net=S.price*(1-S.fee/100)-S.cost; M.net=net; M.gross=S.price-S.cost; M.evp=S.evPrice-S.evQty*S.cost;
+  var b1=0,tot=0,paid=0,s2=0,s3=0,need=0;
+  S.items.forEach(function(i){var a=num(i.amt);tot+=a;if(i.st)paid+=a;if(i.stage===1)b1+=a;if(i.stage===2)s2+=a;if(i.stage===3)s3+=a;if(i.stage>1&&!i.st)need+=a});
+  M.stage1=b1*(1+S.imprev/100); M.s2=s2; M.s3=s3; M.need23=need; M.allTot=tot; M.paid=paid;
+  M.eq=net>0?S.extra/(net*S.days):Infinity;
+  M.sc=S.scen.map(function(sc){var u=sc.cups*S.days*net+sc.ev*M.evp-S.extra;return {u:u,sales:sc.cups*S.days*S.price+sc.ev*S.evPrice,pb:u>0?M.stage1/u:Infinity}});
+  M.act=M.sc[S.scenario]; M.actSc=S.scen[S.scenario];
+  var apo=0,prin=0; S.people.forEach(function(p){var a=num(p.amt);apo+=a;if(p.kind==="prestamo")prin+=a});
+  M.apo=apo; M.prin=prin; M.loanTot=prin*(1+S.rate/100); M.gap=M.stage1-apo;
+  M.rows=[]; var bL=M.loanTot,bS=M.need23,sc=M.actSc; M.loanDone=null; M.stDone=null;
+  for(var k=1;k<=60;k++){
+    var mi=(S.startM-1+k-1)%12, wf=WINTER.indexOf(mi)>=0?S.winter/100:1;
+    var u=sc.cups*S.days*net*wf+sc.ev*M.evp-S.extra, pos=Math.max(0,u), sL=pos*S.share/100, sS=pos-sL;
+    var pL=Math.min(bL,sL), pS=Math.min(bS,sS), lo=sL-pL, lo2=sS-pS;
+    var aS=Math.min(bS-pS,lo); pS+=aS; var aL=Math.min(bL-pL,lo2); pL+=aL;
+    bL-=pL; bS-=pS;
+    M.rows.push({k:k,label:label(k),u:u,pL:pL,pS:pS,bL:bL,bS:bS,free:pos-pL-pS});
+    if(M.loanDone===null&&M.loanTot>0&&bL<0.5)M.loanDone=k;
+    if(M.stDone===null&&M.need23>0&&bS<0.5)M.stDone=k;
+    if(bL<0.5&&bS<0.5&&k>=6)break;
+  }
+  M.firstL=M.rows[0]?M.rows[0].pL:0;
+}
+function cumUtil(N){var out=[0],c=0,sc=M.actSc;for(var k=1;k<=N;k++){var mi=(S.startM-1+k-1)%12,wf=WINTER.indexOf(mi)>=0?S.winter/100:1;c+=sc.cups*S.days*M.net*wf+sc.ev*M.evp-S.extra;out.push(c)}return out}
+
+/* ---------- build static pieces ---------- */
+function buildSeg(){
+  $("#segTop").innerHTML=S.scen.map(function(s,i){return '<button type="button" data-act="scen" data-i="'+i+'" aria-pressed="'+(i===S.scenario)+'">'+esc(s.n)+'</button>'}).join("");
+}
+function itemLi(i){
+  var nm=i.custom?'<input class="in" type="text" value="'+esc(i.name)+'" data-item="'+i.id+'" data-f="name" aria-label="Nombre del gasto" style="text-align:left">':'<span>'+esc(i.name)+'</span>'+(i.note?'<small>'+esc(i.note)+'</small>':'');
+  return '<li class="line">'+ic(i.ic)+'<div class="nm">'+nm+'</div><label class="money"><span>$</span><input type="number" inputmode="numeric" min="0" step="500" value="'+num(i.amt)+'" data-item="'+i.id+'" data-f="amt" aria-label="Monto: '+esc(i.name)+'"></label><button type="button" class="pill" data-act="paid" data-id="'+i.id+'" data-s="'+i.st+'">'+(i.st?"Pagado":"Pendiente")+'</button>'+(i.custom?'<button type="button" class="x" data-act="delItem" data-id="'+i.id+'" aria-label="Quitar gasto">'+ic("x")+'</button>':'')+'</li>';
+}
+function buildItems(){[1,2,3].forEach(function(st){$("#lines"+st).innerHTML=S.items.filter(function(i){return i.stage===st}).map(itemLi).join("")})}
+function buildScen(){
+  $("#scBody").innerHTML=S.scen.map(function(s,i){return '<tr data-sc="'+i+'"><td><button type="button" class="scbtn" data-act="scen" data-i="'+i+'"><span class="dot"></span>'+esc(s.n)+'</button></td><td><input class="in num" type="number" min="0" step="1" value="'+s.cups+'" data-sc="'+i+'" data-f="cups" aria-label="Vasos extra por día, '+esc(s.n)+'"></td><td><input class="in num" type="number" min="0" step="1" value="'+s.ev+'" data-sc="'+i+'" data-f="ev" aria-label="Eventos por mes, '+esc(s.n)+'"></td><td data-o="sc'+i+'s"></td><td data-o="sc'+i+'u"></td><td data-o="sc'+i+'p"></td></tr>'}).join("");
+}
+function buildPeople(){
+  $("#pBody").innerHTML=S.people.map(function(p){return '<tr><td><input class="in" type="text" value="'+esc(p.name)+'" data-p="'+p.id+'" data-f="name" aria-label="Nombre"></td><td><select class="in" data-p="'+p.id+'" data-f="kind" aria-label="Tipo de aportación"><option value="dueno"'+(p.kind==="dueno"?" selected":"")+'>Dueño, aporta</option><option value="prestamo"'+(p.kind==="prestamo"?" selected":"")+'>Préstamo</option></select></td><td><label class="money" style="margin-left:auto"><span>$</span><input type="number" inputmode="numeric" min="0" step="500" value="'+num(p.amt)+'" data-p="'+p.id+'" data-f="amt" aria-label="Monto de '+esc(p.name)+'"></label></td><td data-o="pt'+p.id+'"></td><td data-o="pm'+p.id+'"></td><td data-o="pe'+p.id+'"></td><td><button type="button" class="x" data-act="delPerson" data-id="'+p.id+'" aria-label="Quitar">'+ic("x")+'</button></td></tr>'}).join("");
+}
+var GRP={park:{t:"Parques",ic:"tree",d:"Fines de semana, familias y corredores"},street:{t:"Calles concurridas",ic:"road",d:"Paso constante de gente"},colonia:{t:"Colonias medianas y grandes",ic:"home",d:"Tardes y bazares"}};
+var SPOT=["Por validar","Validado","Descartado"];
+function buildSpots(){
+  $("#spots").innerHTML=Object.keys(GRP).map(function(g){var G=GRP[g];return '<article class="card grp"><h3>'+ic(G.ic)+G.t+'</h3><p class="hint" style="margin-bottom:6px">'+G.d+'</p>'+S.spots.filter(function(s){return s.grp===g}).map(function(s){return '<div class="spot">'+ic("pin")+'<span class="n">'+esc(s.name)+'</span><button type="button" class="pill" data-act="spot" data-id="'+s.id+'" data-s="'+s.st+'">'+SPOT[s.st]+'</button><button type="button" class="x" data-act="delSpot" data-id="'+s.id+'" aria-label="Quitar lugar">'+ic("x")+'</button></div>'}).join("")+'</article>'}).join("");
+}
+function buildTodos(){
+  $("#todos").innerHTML=S.todo.map(function(t){return '<div class="todo"><input type="checkbox" id="td-'+t.id+'" data-act="todo" data-id="'+t.id+'"'+(t.done?" checked":"")+'><label for="td-'+t.id+'">'+esc(t.t)+'</label><button type="button" class="x" data-act="delTodo" data-id="'+t.id+'" aria-label="Quitar pendiente">'+ic("x")+'</button></div>'}).join("");
+}
+function buildInputs(){
+  $$("[data-k]").forEach(function(el){var v=S[el.dataset.k];if(el.tagName==="SELECT")return;el.value=(v===undefined||v===null)?"":v});
+  $("#f-startM").innerHTML=MES.map(function(m,i){return '<option value="'+(i+1)+'"'+(S.startM===i+1?" selected":"")+'>'+m+'</option>'}).join("");
+}
+function buildAll(){buildSeg();buildItems();buildScen();buildPeople();buildSpots();buildTodos();buildInputs()}
+
+/* ---------- charts ---------- */
+function niceStep(r){if(r<=0)return 1;var p=Math.pow(10,Math.floor(Math.log10(r))),f=r/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
+function ticks(min,max,n){var st=niceStep((max-min)/n),a=Math.floor(min/st)*st,o=[];for(var v=a;v<=max+st*0.001;v+=st)o.push(Math.round(v*1000)/1000);return o}
+function chartPay(){
+  var W=640,H=270,L=54,R=16,T=16,B=38, pb=M.act.pb, N=isFinite(pb)?Math.min(36,Math.max(12,Math.ceil(pb*2.2/3)*3)):24, cum=cumUtil(N);
+  var lo=Math.min.apply(null,cum.concat([0])), hi=Math.max(M.stage1*1.15,Math.max.apply(null,cum)*1.05,1000);
+  var tk=ticks(lo,hi,4), yb=tk[0], yt=tk[tk.length-1];
+  function X(k){return L+(W-L-R)*k/N} function Y(v){return T+(H-T-B)*(1-(v-yb)/(yt-yb))}
+  var s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Utilidad extra acumulada contra la inversión de la etapa 1">';
+  tk.forEach(function(v){s+='<line class="g" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+kf(v)+'</text>'});
+  var step=N<=12?2:(N<=24?3:6); for(var k=0;k<=N;k+=step){s+='<text x="'+X(k)+'" y="'+(H-B+16)+'" text-anchor="middle">'+k+'</text>'}
+  s+='<text x="'+(L+(W-L-R)/2)+'" y="'+(H-4)+'" text-anchor="middle">Meses desde que arrancan</text>';
+  var d=cum.map(function(v,i){return (i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)}).join("");
+  s+='<path class="ar" d="'+d+'L'+X(N)+' '+Y(Math.max(0,yb))+'L'+X(0)+' '+Y(Math.max(0,yb))+'Z"/><path class="ln" d="'+d+'"/>';
+  s+='<line class="tg" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(M.stage1)+'" y2="'+Y(M.stage1)+'"/><text x="'+(W-R)+'" y="'+(Y(M.stage1)-6)+'" text-anchor="end" class="lbl">Etapa 1: '+kf(M.stage1)+'</text>';
+  for(var i=1;i<=N;i++){if(cum[i]>=M.stage1&&cum[i-1]<M.stage1){var xk=i-1+(M.stage1-cum[i-1])/(cum[i]-cum[i-1]);s+='<circle class="pt" cx="'+X(xk)+'" cy="'+Y(M.stage1)+'" r="6"/><text class="lbl" x="'+Math.min(X(xk),W-R-40)+'" y="'+(Y(M.stage1)+22)+'" text-anchor="middle">Mes '+f1(xk)+'</text>';break}}
+  return s+'</svg>';
+}
+function chartScen(){
+  var W=640,H=240,L=54,R=16,T=36,B=34, us=M.sc.map(function(c){return c.u}), lo=Math.min.apply(null,us.concat([0])), hi=Math.max.apply(null,us.concat([1000]))*1.1;
+  var tk=ticks(lo,hi,4), yb=tk[0], yt=tk[tk.length-1];
+  function Y(v){return T+(H-T-B)*(1-(v-yb)/(yt-yb))}
+  var s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Utilidad extra mensual por escenario">';
+  tk.forEach(function(v){s+='<line class="g" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+kf(v)+'</text>'});
+  var bw=(W-L-R)/S.scen.length, w=Math.min(110,bw*0.55);
+  M.sc.forEach(function(c,i){var cx=L+bw*i+bw/2, y0=Y(0), y1=Y(c.u), top=Math.min(y0,y1), h=Math.abs(y1-y0);
+    s+='<rect class="b'+(i===S.scenario?" on":"")+(c.u<0?" bn":"")+'" x="'+(cx-w/2)+'" y="'+top+'" width="'+w+'" height="'+Math.max(h,1)+'" rx="5"/>';
+    s+='<text class="lbl" x="'+cx+'" y="'+(c.u>=0?top-6:top+h+14)+'" text-anchor="middle">'+fmt(c.u)+'</text><text x="'+cx+'" y="'+(H-10)+'" text-anchor="middle">'+esc(S.scen[i].n)+'</text>'});
+  return s+'</svg>';
+}
+function chartBal(){
+  var W=440,H=260,L=48,R=14,T=16,B=38, rows=M.rows.slice(0,24), N=Math.max(rows.length,6), hi=Math.max(M.loanTot,M.need23,1000)*1.08, tk=ticks(0,hi,4), yt=tk[tk.length-1];
+  function X(k){return L+(W-L-R)*k/N} function Y(v){return T+(H-T-B)*(1-v/yt)}
+  var s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Saldo pendiente del préstamo y de la pintura por mes">';
+  tk.forEach(function(v){s+='<line class="g" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+kf(v)+'</text>'});
+  var step=N>12?3:1; for(var k=0;k<=N;k+=step){s+='<text x="'+X(k)+'" y="'+(H-B+16)+'" text-anchor="middle">'+k+'</text>'}
+  s+='<text x="'+(L+(W-L-R)/2)+'" y="'+(H-4)+'" text-anchor="middle">Meses desde que arrancan</text>';
+  function path(start,key){var d="M"+X(0)+" "+Y(start);rows.forEach(function(r){d+="L"+X(r.k)+" "+Y(r[key])});return d}
+  if(M.need23>0)s+='<path class="ln2" d="'+path(M.need23,"bS")+'"/>';
+  if(M.loanTot>0)s+='<path class="ln" d="'+path(M.loanTot,"bL")+'"/>';
+  if(M.loanDone&&M.loanDone<=N)s+='<circle class="pt" cx="'+X(M.loanDone)+'" cy="'+Y(0)+'" r="5"/><text class="lbl" x="'+(X(M.loanDone)-8)+'" y="'+(Y(0)-12)+'" text-anchor="end">Préstamo: mes '+M.loanDone+'</text>';
+  return s+'</svg>';
+}
+
+/* ---------- render outputs ---------- */
+function setO(k,v){$$('[data-o="'+k+'"]').forEach(function(e){e.textContent=v})}
+function kpi(c,lab,icn,val,sub){return '<div class="kpi '+c+'"><div class="row"><span class="lab">'+lab+'</span>'+ic(icn)+'</div><div class="val num">'+val+'</div><div class="sub">'+sub+'</div></div>'}
+function render(){
+  calc();
+  var A=M.act, eqn=isFinite(M.eq)?M.eq:null, alarm=eqn===null?10:Math.max(1,Math.round(eqn));
+  setO("combiAmt",fmt(num((S.items.filter(function(i){return i.id==="combi"})[0]||{}).amt)));
+  setO("t1",fmt(M.stage1)); setO("t2",fmt(M.s2)); setO("t3",fmt(M.s3));
+  setO("paidTxt",fmt(M.paid)+" de "+fmt(M.allTot)); $("#paidBar").style.width=(M.allTot>0?Math.min(100,M.paid/M.allTot*100):0)+"%";
+  setO("gross",fmt(M.gross)+" por vaso"); setO("net","$"+f1(M.net)+" por vaso"); setO("evp",fmt(M.evp)); setO("alarmN",String(alarm));
+  // verdict
+  var v=$("#verdict"), vt, vx, vs;
+  if(A.u<=0){vs="bad";vt="Con este escenario no se cubre el gasto extra";vx="La utilidad extra es "+fmt(A.u)+" al mes. Hacen falta al menos "+(eqn===null?"más":f1(eqn))+" vasos extra por día, o eventos."}
+  else if(A.pb<=12){vs="good";vt="Sí conviene: la etapa 1 se recupera en "+months(A.pb);vx="Con "+M.actSc.cups+" vasos extra al día y "+M.actSc.ev+" evento(s) al mes, la utilidad extra es de "+fmt(A.u)+" al mes."}
+  else if(A.pb<=24){vs="warn";vt="Conviene con calma: la etapa 1 se recupera en "+months(A.pb);vx="La utilidad extra es de "+fmt(A.u)+" al mes. Los eventos acortan el plazo."}
+  else{vs="bad";vt="Se tarda "+months(A.pb)+" en recuperar la etapa 1";vx="Con "+fmt(A.u)+" de utilidad extra al mes el plazo es largo. Conviene empujar eventos o cambiar de punto."}
+  v.dataset.s=vs; $("#vTitle").textContent=vt; $("#vText").textContent=vx;
+  $("#kpis").innerHTML=
+    kpi("k-wine","Etapa 1","van",fmt(M.stage1),"Combi y equipo"+(S.imprev?" con "+S.imprev+"% de imprevistos":""))+
+    kpi("k-sky","Aportado","users",fmt(M.apo),M.gap>0.5?"Faltan "+fmt(M.gap)+" para la etapa 1":(M.gap<-0.5?"Sobran "+fmt(-M.gap):"Cubre la etapa 1"))+
+    kpi("k-mint","Utilidad extra al mes","trend",fmt(A.u),"Escenario "+esc(M.actSc.n).toLowerCase())+
+    kpi("k-plain","Equilibrio","coin",(eqn===null?"—":f1(eqn))+" /día","Vasos extra para cubrir el gasto extra")+
+    kpi("k-lime","Recuperan etapa 1","cal",months(A.pb),"Utilidad extra contra "+fmt(M.stage1))+
+    kpi("k-wine","Amigos reciben","return",fmt(M.loanTot),M.loanDone?"Se les paga en "+months(M.loanDone):(M.loanTot>0?"Más de 5 años con este ritmo":"Sin préstamos"));
+  // scenarios
+  M.sc.forEach(function(c,i){setO("sc"+i+"s",fmt(c.sales));$$('[data-o="sc'+i+'u"]').forEach(function(e){e.textContent=fmt(c.u);e.classList.toggle("neg",c.u<0)});setO("sc"+i+"p",c.u>0?"~"+months(c.pb):"No se recupera")});
+  $$("#scBody tr").forEach(function(r){r.classList.toggle("sel",+r.dataset.sc===S.scenario)});
+  $$("#segTop button").forEach(function(b){b.setAttribute("aria-pressed",String(+b.dataset.i===S.scenario))});
+  $("#chScen").innerHTML=chartScen(); $("#chPay").innerHTML=chartPay();
+  // alarm
+  var ao=$("#alarmOut"), cur=S.current===""?null:num(S.current), act=S.actual===""?null:num(S.actual), t="";
+  if(act!==null){t=act>=alarm?'<span class="chip good">'+ic("check")+' Pasa la regla</span> Llevan '+f1(act)+' vasos extra al día contra '+alarm+' necesarios.':'<span class="chip bad">'+ic("alert")+' No pasa la regla</span> Llevan '+f1(act)+' vasos extra al día y se necesitan '+alarm+'. Cambien de punto o empujen eventos.'}
+  else t='<span class="chip warn">'+ic("gap")+' Sin dato</span> Anoten cuántos vasos extra al día llevan después de 2 meses.';
+  if(cur!==null&&cur>0)t+=' <br><span class="muted">El escenario activo equivale a '+Math.round(M.actSc.cups/cur*100)+'% más que las ventas actuales del puesto.</span>';
+  ao.innerHTML=t;
+  // loan section
+  var gapChip=M.gap>0.5?'<span class="chip warn">Faltan '+fmt(M.gap)+'</span>':'<span class="chip good">Cubierto</span>';
+  $("#loanKpis").innerHTML=
+    kpi("k-sky","Aportado","users",fmt(M.apo),gapChip.replace(/<[^>]+>/g,""))+
+    kpi("k-plain","Necesario etapa 1","van",fmt(M.stage1),"Combi, equipo y permisos")+
+    kpi("k-mint","Prestado","coin",fmt(M.prin),"Se devuelve con "+S.rate+"% de interés")+
+    kpi("k-wine","A devolver","return",fmt(M.loanTot),"Aprox. "+fmt(M.firstL)+" al mes");
+  var ft="";
+  S.people.forEach(function(p){var a=num(p.amt),pr=p.kind==="prestamo",tot=pr?a*(1+S.rate/100):0,sh=M.loanTot>0?tot/M.loanTot:0;
+    setO("pt"+p.id,pr?fmt(tot):"—"); setO("pm"+p.id,pr?fmt(M.firstL*sh):"—"); setO("pe"+p.id,pr?(M.loanDone?label(M.loanDone):"Más de 5 años"):"—")});
+  $("#pFoot").innerHTML='<tr class="total"><td>Total</td><td></td><td>'+fmt(M.apo)+'</td><td>'+fmt(M.loanTot)+'</td><td>'+fmt(M.firstL)+'</td><td>'+(M.loanDone?label(M.loanDone):"—")+'</td><td></td></tr><tr><td colspan="7" style="text-align:left;border:0;padding-top:10px">'+gapChip+' <span class="muted">Etapa 1 necesita '+fmt(M.stage1)+' y hay '+fmt(M.apo)+' aportados.</span></td></tr>';
+  $("#mBody").innerHTML=M.rows.slice(0,36).map(function(r){return '<tr><td>'+r.label+'</td><td class="'+(r.u<0?"neg":"")+'">'+fmt(r.u)+'</td><td>'+fmt(r.pL)+'</td><td>'+fmt(r.pS)+'</td><td>'+fmt(r.free)+'</td></tr>'}).join("");
+  $("#chBal").innerHTML=chartBal();
+  // todo
+  var d=S.todo.filter(function(t){return t.done}).length; setO("todoTxt",d+" de "+S.todo.length); $("#todoBar").style.width=(S.todo.length?d/S.todo.length*100:0)+"%";
+}
+
+/* ---------- persistence (shared via db when allowed) ---------- */
+var dbDoc=null, canWrite=true, myRev="", timer=null, writing=false, again=false, lastEdit=0, dirty=false;
+function status(s,t){var e=$("#save");e.dataset.s=s;e.querySelector("span").textContent=t}
+function persist(){
+  dirty=true; lastEdit=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  if(dbDoc&&canWrite){status("busy","Guardando…");clearTimeout(timer);timer=setTimeout(flush,900)}
+}
+function flush(){
+  if(writing){again=true;return}
+  writing=true; myRev=uid()+Date.now().toString(36);
+  dbDoc.set({rev:myRev,state:JSON.parse(JSON.stringify(S))}).then(function(){writing=false;if(again){again=false;flush()}else status("ok","Guardado para todos")}).catch(function(e){writing=false;if(e&&e.code==="invalid_argument"){canWrite=false;status("local","Solo en este dispositivo (sin permiso para guardar)")}else status("local","Sin conexión al guardado compartido")});
+}
+function changed(){persist();render()}
+function startDb(){
+  if(!window.claude||!window.claude.use)return;
+  window.claude.use("db").then(function(db){
+    if(!db)return;
+    dbDoc=db.doc("plan/main"); var t=setTimeout(function(){status("local","Sin respuesta del guardado compartido")},10000);
+    dbDoc.onSnapshot(function(snap){
+      if(!snap.metadata.fromCache)clearTimeout(t);
+      if(snap.exists){var d=snap.data();
+        if(d&&d.state&&d.rev&&d.rev!==myRev&&!snap.metadata.hasPendingWrites&&Date.now()-lastEdit>2500){S=merge(d.state);myRev=d.rev;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}buildAll();render()}
+        if(!writing&&!snap.metadata.fromCache)status("ok","Guardado para todos")}
+      else if(!snap.metadata.fromCache)status("ok","Listo para guardar y compartir");
+    },function(){clearTimeout(t);status("local","Solo en este dispositivo")});
+  }).catch(function(){});
+}
+
+/* ---------- events ---------- */
+function setPath(el){
+  var v=el.value;
+  if(el.dataset.k){var k=el.dataset.k;if(k==="current"||k==="actual")S[k]=v===""?"":num(v);else if(k==="startM")S[k]=parseInt(v,10);else S[k]=num(v)}
+  else if(el.dataset.item){var it=S.items.filter(function(i){return i.id===el.dataset.item})[0];if(it)it[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
+  else if(el.dataset.sc!==undefined){S.scen[+el.dataset.sc][el.dataset.f]=num(v)}
+  else if(el.dataset.p){var p=S.people.filter(function(x){return x.id===el.dataset.p})[0];if(p)p[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
+  else return false;
+  return true;
+}
+document.addEventListener("input",function(e){var el=e.target;if(el.matches("input[type=number],input[type=text]")&&setPath(el))changed()});
+document.addEventListener("change",function(e){var el=e.target;if(el.tagName==="SELECT"&&setPath(el)){if(el.dataset.p){changed()}else changed()}if(el.dataset&&el.dataset.act==="todo"){var t=S.todo.filter(function(x){return x.id===el.dataset.id})[0];if(t){t.done=el.checked;changed()}}});
+document.addEventListener("click",function(e){
+  var go=e.target.closest("[data-go]");if(go){var s=$("#"+go.dataset.go);if(s)s.scrollIntoView({block:"start"});return}
+  var b=e.target.closest("[data-act]");if(!b||b.tagName==="INPUT")return;
+  var a=b.dataset.act,id=b.dataset.id;
+  if(a==="scen"){S.scenario=+b.dataset.i;changed()}
+  else if(a==="paid"){var it=S.items.filter(function(i){return i.id===id})[0];it.st=it.st?0:1;buildItems();changed()}
+  else if(a==="addItem"){S.items.push({id:uid(),stage:+b.dataset.stage,name:"Nuevo gasto",amt:0,st:0,ic:"coin",custom:true});buildItems();changed()}
+  else if(a==="delItem"){S.items=S.items.filter(function(i){return i.id!==id});buildItems();changed()}
+  else if(a==="addPerson"){S.people.push({id:uid(),name:"Nueva persona",kind:"prestamo",amt:0});buildPeople();changed()}
+  else if(a==="delPerson"){S.people=S.people.filter(function(p){return p.id!==id});buildPeople();changed()}
+  else if(a==="spot"){var s=S.spots.filter(function(x){return x.id===id})[0];s.st=(s.st+1)%3;buildSpots();changed()}
+  else if(a==="delSpot"){S.spots=S.spots.filter(function(x){return x.id!==id});buildSpots();changed()}
+  else if(a==="addSpot"){var n=$("#spotName").value.trim();if(n){S.spots.push({id:uid(),grp:$("#spotGrp").value,name:n,st:0});$("#spotName").value="";buildSpots();changed()}}
+  else if(a==="delTodo"){S.todo=S.todo.filter(function(t){return t.id!==id});buildTodos();changed()}
+  else if(a==="addTodo"){var tn=$("#todoName").value.trim();if(tn){S.todo.push({id:uid(),t:tn,done:false});$("#todoName").value="";buildTodos();changed()}}
+});
+["#spotName","#todoName"].forEach(function(s){$(s).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$(s==="#spotName"?'[data-act="addSpot"]':'[data-act="addTodo"]').click()}})});
+
+buildAll(); render(); startDb();
+})();
+</script>
+
+</body></html>
