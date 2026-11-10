@@ -205,7 +205,18 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 .gantt{min-width:880px}
 .g-row{display:grid;grid-template-columns:220px 130px 112px minmax(0,1fr);align-items:center;column-gap:12px;border-top:1px solid var(--line);min-height:44px}
 .g-row.hd{border-top:0;min-height:28px;font:700 10.5px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.g-nm{display:flex;flex-direction:column;min-width:0;padding:6px 0}
+.g-nm{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:6px 4px;margin-left:-4px;border:0;background:none;text-align:left;border-radius:6px;color:inherit}
+.g-nm:hover{background:var(--surface2)}
+.g-nm b .ic{width:13px;height:13px;margin-left:6px;vertical-align:-1px;color:var(--muted);opacity:.6}
+.g-nm:hover b .ic{opacity:1;color:var(--label)}
+.g-row.editing{background:var(--surface2)}
+.g-edit{display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr;gap:10px 12px;padding:12px;background:var(--surface2);border-top:1px dashed var(--line);max-width:760px}
+.g-edit label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted);min-width:0}
+.g-edit label.chk{flex-direction:row;align-items:center;gap:8px;grid-column:1/3;font-weight:500;color:var(--ink)}
+.g-edit label.chk input{width:18px;height:18px;accent-color:var(--wine)}
+.g-edit .acts{grid-column:3/5;display:flex;gap:8px;justify-content:flex-end;align-items:center}
+.g-edit .del{border:0;background:none;color:var(--bad);font-weight:600;padding:8px 6px}
+.g-edit .w-all{grid-column:1/-1}
 .g-nm b{font-weight:600}
 .g-nm small{font:500 11px/1.3 var(--f-mono);color:var(--muted)}
 .g-nm small.late{color:var(--bad)}
@@ -267,6 +278,7 @@ details.card[open]>summary{margin-bottom:12px}
 <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
 <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21h4"/></symbol>
 <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></symbol>
 <symbol id="i-gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></symbol>
 </svg>
 
@@ -433,10 +445,11 @@ details.card[open]>summary{margin-bottom:12px}
   </div>
   <div class="grid kpis" id="hitos"></div>
   <div class="card" style="margin-top:14px">
-    <div class="gt-top"><h3>Calendario de arranque · 20 frentes</h3><span class="num muted" id="fSum"></span></div>
+    <div class="gt-top"><h3>Calendario de arranque · <span data-o="fCount">20 frentes</span></h3><span class="num muted" id="fSum"></span></div>
     <div class="bar" style="margin-bottom:12px"><i id="fBar" style="width:0"></i></div>
     <div class="gt-leg" id="gLeg" style="margin-bottom:8px"></div>
     <div class="tw"><div class="gantt" id="gantt"></div></div>
+    <div class="addrow"><button class="btn" type="button" data-act="fAdd">+ Agregar frente</button><button class="add" type="button" data-act="fSort" style="width:auto;margin-top:0">Ordenar por fecha</button><span class="hint" style="align-self:center">Toca el nombre de un frente para editarlo o eliminarlo.</span></div>
     <p class="hint" style="margin-top:10px">Si el taller se atrasa, el equipamiento interior y el vinil se recorren una semana y la prueba pasa al 2 de enero. Si el atraso es mayor a una semana, se abre el 9 de enero con la combi limpia, caballete y menú, y se pinta en la primera quincena de enero.</p>
   </div>
   <div class="card" style="margin-top:14px"><h3 style="margin-bottom:8px">Riesgos y reglas de decisión</h3>
@@ -559,33 +572,27 @@ var DEF={
  follow:{}, ver:3
 };
 var AREAS={din:{t:"Decisiones y dinero",c:"var(--a-din)"},tra:{t:"Trámites",c:"var(--a-tra)"},com:{t:"Combi",c:"var(--a-com)"},ope:{t:"Operación",c:"var(--a-ope)"},ven:{t:"Ventas y marketing",c:"var(--a-ven)"}};
-var FR=[
+DEF.frentes=[
  {id:"f1",n:"Titular, cafetera y punto",a:"din",s:"2026-11-10",e:"2026-11-16"},
  {id:"f2",n:"Reunir el faltante",a:"din",s:"2026-11-10",e:"2026-11-29"},
  {id:"f3",n:"Mecánico y papeles",a:"com",s:"2026-11-10",e:"2026-11-23"},
  {id:"f4",n:"SAT y cuenta del negocio",a:"din",s:"2026-11-10",e:"2026-11-23"},
  {id:"f5",n:"Acuerdos con amigos",a:"din",s:"2026-11-17",e:"2026-11-23"},
- {id:"f6",n:"Pagar la combi",a:"com",s:"2026-11-23",e:"2026-11-23",ms:1},
+ {id:"f6",n:"Pagar la combi",a:"com",s:"2026-11-23",e:"2026-11-23",k:1},
  {id:"f7",n:"Constancias IMPAS",a:"tra",s:"2026-11-17",e:"2026-11-23"},
  {id:"f8",n:"Permiso de vía pública",a:"tra",s:"2026-11-17",e:"2026-12-07"},
  {id:"f9",n:"Afinación",a:"com",s:"2026-11-24",e:"2026-11-29"},
- {id:"f10",n:"Hojalatería y pintura",a:"com",s:"2026-11-30",e:"2026-12-13",key:1},
+ {id:"f10",n:"Hojalatería y pintura",a:"com",s:"2026-11-30",e:"2026-12-13",k:1},
  {id:"f11",n:"Eléctrico, agua y repisas",a:"com",s:"2026-12-14",e:"2026-12-20"},
  {id:"f12",n:"Vinil y caballete",a:"com",s:"2026-12-21",e:"2026-12-23"},
  {id:"f13",n:"Menú, recetas y proveedores",a:"ope",s:"2026-11-24",e:"2026-12-07"},
  {id:"f14",n:"Caja y cobro con tarjeta",a:"ope",s:"2026-12-14",e:"2026-12-20"},
  {id:"f15",n:"Protección Civil",a:"tra",s:"2026-12-21",e:"2027-01-04"},
- {id:"f16",n:"Prueba completa",a:"ope",s:"2026-12-27",e:"2026-12-27",ms:1},
+ {id:"f16",n:"Prueba completa",a:"ope",s:"2026-12-27",e:"2026-12-27",k:1},
  {id:"f17",n:"Validar puntos",a:"ven",s:"2026-12-01",e:"2026-12-28"},
  {id:"f18",n:"Vender eventos privados",a:"ven",s:"2026-12-01",e:"2026-12-31"},
  {id:"f19",n:"Historia en redes",a:"ven",s:"2026-11-10",e:"2027-01-09"},
- {id:"f20",n:"Lanzamiento",a:"ven",s:"2027-01-09",e:"2027-01-09",ms:1}
-];
-var HITOS=[
- {t:"Pagar la combi",d:"2026-11-23",f:"f6",c:"k-wine",ic:"van"},
- {t:"Entra a pintura",d:"2026-11-30",f:"f10",c:"k-cafe",ic:"roller"},
- {t:"Prueba completa",d:"2026-12-27",f:"f16",c:"k-sky",ic:"cup"},
- {t:"Lanzamiento",d:"2027-01-09",f:"f20",c:"k-mint",ic:"spark"}
+ {id:"f20",n:"Lanzamiento",a:"ven",s:"2027-01-09",e:"2027-01-09",k:1}
 ];
 var S=JSON.parse(JSON.stringify(DEF)), KEY="cafefrio-combi-v2";
 function merge(src){var o=JSON.parse(JSON.stringify(DEF));if(src&&typeof src==="object"){Object.keys(DEF).forEach(function(k){if(src[k]!==undefined&&src[k]!==null)o[k]=src[k]})
@@ -649,37 +656,53 @@ function buildTodos(){
   $("#todos").innerHTML=S.todo.map(function(t){return '<div class="todo"><input type="checkbox" id="td-'+t.id+'" data-act="todo" data-id="'+t.id+'"'+(t.done?" checked":"")+'><label for="td-'+t.id+'">'+esc(t.t)+'</label><button type="button" class="x" data-act="delTodo" data-id="'+t.id+'" aria-label="Quitar pendiente">'+ic("x")+'</button></div>'}).join("");
 }
 /* ---------- seguimiento ---------- */
-var G0=Date.parse("2026-11-10T00:00:00"), G1=Date.parse("2027-01-12T00:00:00"), DAY=864e5, MESC=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
-function dt(iso){return Date.parse(iso+"T00:00:00")}
+var G0, G1, DAY=864e5, MESC=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"], fEditing=null, KCOL=["k-wine","k-cafe","k-sky","k-mint"];
+function dt(iso){var t=Date.parse(iso+"T00:00:00");return isFinite(t)?t:today()}
 function today(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
+function pad(n){return (n<10?"0":"")+n}
+function isoOf(t){var d=new Date(t);return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
 function dlab(iso){var d=new Date(dt(iso));return d.getDate()+" "+MESC[d.getMonth()]}
 function pct(t){return Math.max(0,Math.min(100,(t-G0)/(G1-G0)*100))}
 function fst(f){var o=S.follow[f.id]||{};var st=o.st||0;if(st!==2&&dt(f.e)<today())return "late";return st}
+function range(){var lo=dt("2026-11-10"),hi=dt("2027-01-12");S.frentes.forEach(function(f){lo=Math.min(lo,dt(f.s));hi=Math.max(hi,dt(f.e)+3*DAY)});G0=lo;G1=hi}
+function fEditor(f){
+  var ar=Object.keys(AREAS).map(function(k){return '<option value="'+k+'"'+(f.a===k?" selected":"")+'>'+AREAS[k].t+'</option>'}).join("");
+  return '<div class="g-edit"><label class="w2">Nombre<input class="in" type="text" value="'+esc(f.n)+'" data-fe="'+f.id+'" data-f="n" id="fe-n"></label>'+
+    '<label>Área<select class="in" data-fe="'+f.id+'" data-f="a">'+ar+'</select></label>'+
+    '<label>Inicio<input class="in" type="date" value="'+f.s+'" data-fe="'+f.id+'" data-f="s"></label>'+
+    '<label>Fin<input class="in" type="date" value="'+f.e+'" data-fe="'+f.id+'" data-f="e"></label>'+
+    '<label class="chk"><input type="checkbox" data-fe="'+f.id+'" data-f="k"'+(f.k?" checked":"")+'> Fecha clave (se muestra arriba)</label>'+
+    '<div class="acts"><button type="button" class="btn" data-act="fDone">Listo</button><button type="button" class="del" data-act="fDel" data-id="'+f.id+'">Eliminar frente</button></div>'+
+    '<p class="hint w-all">Si inicio y fin son el mismo día, se dibuja como un rombo.</p></div>';
+}
 function buildFollow(){
+  range();
   $("#gLeg").innerHTML=Object.keys(AREAS).map(function(k){return '<span><i style="background:'+AREAS[k].c+'"></i>'+AREAS[k].t+'</span>'}).join("")+'<span><i style="background:var(--today);width:3px"></i>Hoy</span>';
   var T=today(), tp=(T>=G0&&T<=G1)?'<span class="g-today" style="left:'+pct(T)+'%"></span>':'', wk="", wl="";
   for(var t=G0,i=0;t<G1;t+=7*DAY,i++){var d=new Date(t);wk+='<span class="wk" style="left:'+pct(t)+'%"></span>';wl+='<span class="wl'+(i===0?" first":"")+'" style="left:'+pct(t)+'%">'+d.getDate()+" "+MESC[d.getMonth()]+'</span>'}
   var h='<div class="g-row hd"><span>Frente</span><span>Responsable</span><span>Estado</span><div class="g-tl">'+wk+wl+tp+'</div></div>';
-  FR.forEach(function(f){var o=S.follow[f.id]||{}, st=fst(f), c=AREAS[f.a].c, cls=(st===2?" done":"")+(st==="late"?" late":"");
-    var when=f.ms?dlab(f.s):dlab(f.s)+" – "+dlab(f.e);
-    var mark=f.ms?'<span class="g-ms'+(st===2?" done":"")+'" style="--c:'+c+';left:'+((pct(dt(f.s))+pct(dt(f.s)+DAY))/2)+'%"></span>'
+  S.frentes.forEach(function(f){var o=S.follow[f.id]||{}, st=fst(f), A=AREAS[f.a]||AREAS.ope, c=A.c, cls=(st===2?" done":"")+(st==="late"?" late":""), one=f.s===f.e;
+    var when=one?dlab(f.s):dlab(f.s)+" – "+dlab(f.e);
+    var mark=one?'<span class="g-ms'+(st===2?" done":"")+'" style="--c:'+c+';left:'+((pct(dt(f.s))+pct(dt(f.s)+DAY))/2)+'%"></span>'
       :'<span class="g-bar'+cls+'" style="--c:'+c+';left:'+pct(dt(f.s))+'%;width:'+(pct(dt(f.e)+DAY)-pct(dt(f.s)))+'%"></span>';
-    h+='<div class="g-row'+(f.ms||f.key?" ms":"")+'"><div class="g-nm"><b>'+esc(f.n)+'</b><small'+(st==="late"?' class="late"':'')+'>'+when+(st==="late"?" · atrasado":"")+'</small></div>'+
+    h+='<div class="g-row'+(f.k?" ms":"")+(fEditing===f.id?" editing":"")+'"><button type="button" class="g-nm" data-act="fEdit" data-id="'+f.id+'" title="Editar frente"><b>'+esc(f.n)+ic("edit")+'</b><small'+(st==="late"?' class="late"':'')+'>'+when+(st==="late"?" · atrasado":"")+'</small></button>'+
       '<input class="in" type="text" value="'+esc(o.who||"")+'" placeholder="Asignar" data-fw="'+f.id+'" aria-label="Responsable de '+esc(f.n)+'">'+
-      '<select class="in" data-fs="'+f.id+'" data-st="'+st+'" aria-label="Estado de '+esc(f.n)+'"><option value="0"'+(st===0||st==="late"&&!(o.st)?" selected":"")+'>'+(st==="late"?"Atrasado":"Pendiente")+'</option><option value="1"'+(o.st===1?" selected":"")+'>En curso</option><option value="2"'+(o.st===2?" selected":"")+'>Hecho</option></select>'+
-      '<div class="g-tl">'+wk+tp+mark+'</div></div>'});
+      '<select class="in" data-fs="'+f.id+'" data-st="'+st+'" aria-label="Estado de '+esc(f.n)+'"><option value="0"'+(!o.st?" selected":"")+'>'+(st==="late"?"Atrasado":"Pendiente")+'</option><option value="1"'+(o.st===1?" selected":"")+'>En curso</option><option value="2"'+(o.st===2?" selected":"")+'>Hecho</option></select>'+
+      '<div class="g-tl">'+wk+tp+mark+'</div></div>'+(fEditing===f.id?fEditor(f):"")});
   $("#gantt").innerHTML=h;
 }
 function renderFollow(){
-  var T=today(), done=0, cur=0, late=0;
-  FR.forEach(function(f){var st=fst(f);if(st===2)done++;else if(st==="late")late++;else if(st===1)cur++});
-  $("#fSum").textContent=done+" de "+FR.length+" hechos · "+cur+" en curso · "+late+(late===1?" atrasado":" atrasados");
-  $("#fBar").style.width=(done/FR.length*100)+"%";
+  var T=today(), done=0, cur=0, late=0, N=S.frentes.length;
+  S.frentes.forEach(function(f){var st=fst(f);if(st===2)done++;else if(st==="late")late++;else if(st===1)cur++});
+  setO("fCount",N+(N===1?" frente":" frentes"));
+  $("#fSum").textContent=done+" de "+N+" hechos · "+cur+" en curso · "+late+(late===1?" atrasado":" atrasados");
+  $("#fBar").style.width=(N?done/N*100:0)+"%";
   var open=M.stage1+M.s2+M.s3, gap=open-M.apo;
   setO("gapOpen",fmt(Math.max(0,gap)));
-  $("#hitos").innerHTML=HITOS.map(function(h){var st=(S.follow[h.f]||{}).st, n=Math.round((dt(h.d)-T)/DAY), sub;
+  var keys=S.frentes.filter(function(f){return f.k}).slice().sort(function(a,b){return dt(a.s)-dt(b.s)});
+  $("#hitos").innerHTML=keys.map(function(f,i){var st=(S.follow[f.id]||{}).st, n=Math.round((dt(f.s)-T)/DAY), sub;
     if(st===2)sub="Hecho";else if(n>1)sub="En "+n+" días";else if(n===1)sub="Mañana";else if(n===0)sub="Hoy";else sub="Venció hace "+(-n)+(n===-1?" día":" días");
-    return kpi(h.c,h.t,h.ic,dlab(h.d),sub)}).join("")+
+    return kpi(KCOL[i%KCOL.length],esc(f.n),"cal",dlab(f.s),sub)}).join("")+
     kpi("k-lime","Por reunir al 30 nov","coin",fmt(Math.max(0,gap)),"Abrir con pintura y vinil: "+fmt(open)+"; aportado "+fmt(M.apo));
 }
 function buildInputs(){
@@ -821,6 +844,7 @@ function setPath(el){
   if(el.dataset.k){var k=el.dataset.k;if(k==="current"||k==="actual")S[k]=v===""?"":num(v);else if(k==="startM")S[k]=parseInt(v,10);else S[k]=num(v)}
   else if(el.dataset.item){var it=S.items.filter(function(i){return i.id===el.dataset.item})[0];if(it)it[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
   else if(el.dataset.sc!==undefined){S.scen[+el.dataset.sc][el.dataset.f]=num(v)}
+  else if(el.dataset.fe&&el.dataset.f==="n"){var fn=S.frentes.filter(function(x){return x.id===el.dataset.fe})[0];if(fn)fn.n=v}
   else if(el.dataset.fw){var fo=S.follow[el.dataset.fw]=S.follow[el.dataset.fw]||{};fo.who=v}
   else if(el.dataset.fs){var fs=S.follow[el.dataset.fs]=S.follow[el.dataset.fs]||{};fs.st=parseInt(v,10)||0}
   else if(el.dataset.p){var p=S.people.filter(function(x){return x.id===el.dataset.p})[0];if(p)p[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
@@ -828,7 +852,12 @@ function setPath(el){
   return true;
 }
 document.addEventListener("input",function(e){var el=e.target;if(el.matches("input[type=number],input[type=text]")&&setPath(el))changed()});
-document.addEventListener("change",function(e){var el=e.target;if(el.tagName==="SELECT"&&setPath(el)){if(el.dataset.fs)buildFollow();changed()}if(el.dataset&&el.dataset.act==="todo"){var t=S.todo.filter(function(x){return x.id===el.dataset.id})[0];if(t){t.done=el.checked;changed()}}});
+document.addEventListener("change",function(e){var el=e.target;if(el.dataset&&el.dataset.fe){var f=S.frentes.filter(function(x){return x.id===el.dataset.fe})[0];if(!f)return;var k=el.dataset.f;
+    if(k==="n"){f.n=el.value.trim()||"Sin nombre";var lb=$(".g-row.editing .g-nm b");if(lb)lb.firstChild.nodeValue=f.n;changed();return}
+    if(k==="k")f.k=el.checked?1:0;else if((k==="s"||k==="e")&&!el.value)return;else f[k]=el.value;
+    if(k==="s"&&dt(f.e)<dt(f.s))f.e=f.s; if(k==="e"&&dt(f.e)<dt(f.s))f.s=f.e;
+    buildFollow();changed();return}
+  if(el.tagName==="SELECT"&&setPath(el)){if(el.dataset.fs)buildFollow();changed()}if(el.dataset&&el.dataset.act==="todo"){var t=S.todo.filter(function(x){return x.id===el.dataset.id})[0];if(t){t.done=el.checked;changed()}}});
 document.addEventListener("click",function(e){
   var go=e.target.closest("[data-go]");if(go){var s=$("#"+go.dataset.go);if(s)s.scrollIntoView({block:"start"});return}
   var b=e.target.closest("[data-act]");if(!b||b.tagName==="INPUT")return;
@@ -842,9 +871,15 @@ document.addEventListener("click",function(e){
   else if(a==="spot"){var s=S.spots.filter(function(x){return x.id===id})[0];s.st=(s.st+1)%3;buildSpots();changed()}
   else if(a==="delSpot"){S.spots=S.spots.filter(function(x){return x.id!==id});buildSpots();changed()}
   else if(a==="addSpot"){var n=$("#spotName").value.trim();if(n){S.spots.push({id:uid(),grp:$("#spotGrp").value,name:n,st:0});$("#spotName").value="";buildSpots();changed()}}
+  else if(a==="fEdit"){fEditing=fEditing===id?null:id;buildFollow();if(fEditing){var ni=$("#fe-n");if(ni)ni.focus()}}
+  else if(a==="fDone"){fEditing=null;buildFollow()}
+  else if(a==="fDel"){var fd=S.frentes.filter(function(x){return x.id===id})[0];if(fd&&confirm('¿Eliminar el frente "'+fd.n+'"?')){S.frentes=S.frentes.filter(function(x){return x.id!==id});delete S.follow[id];fEditing=null;buildFollow();changed()}}
+  else if(a==="fAdd"){var t0=today(),nf={id:"f"+uid(),n:"Nuevo frente",a:"ope",s:isoOf(t0),e:isoOf(t0+6*DAY),k:0};S.frentes.push(nf);fEditing=nf.id;buildFollow();changed();var ni2=$("#fe-n");if(ni2){ni2.focus();ni2.select()}}
+  else if(a==="fSort"){S.frentes.sort(function(x,y){return dt(x.s)-dt(y.s)||dt(x.e)-dt(y.e)});buildFollow();changed()}
   else if(a==="delTodo"){S.todo=S.todo.filter(function(t){return t.id!==id});buildTodos();changed()}
   else if(a==="addTodo"){var tn=$("#todoName").value.trim();if(tn){S.todo.push({id:uid(),t:tn,done:false});$("#todoName").value="";buildTodos();changed()}}
 });
+document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="fe-n"){e.preventDefault();e.target.blur();fEditing=null;buildFollow()}});
 ["#spotName","#todoName"].forEach(function(s){$(s).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$(s==="#spotName"?'[data-act="addSpot"]':'[data-act="addTodo"]').click()}})});
 
 buildAll(); render(); startDb();
