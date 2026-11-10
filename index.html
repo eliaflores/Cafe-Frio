@@ -3,29 +3,35 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&f[]=clash-display@500,600,700&f[]=panchang@700,800&display=swap">
 <style>
-/* Layout: sticky header with scenario switch, then a scroll of six sections (resumen, inversión, ventas, préstamo, dónde, pendientes). Palette taken from the Café Frío deck: vino, menta, lima, cielo. */
+/* Paleta del brandbook Café Frío (jul 2026). Primarios: Deco #508348, Foam de lavanda #D5EAFD, Café molido #55412F, Fresa #F9DDE0.
+   Secundarios: Chai #FBFFCD, Matcha #C1DC8A, Morita #54233A, Mandarina #FFAA00. Tipografía: Clash (textos), Panchang (destacados). */
 :root{
-  --bg:#F5EDE3; --surface:#FFFFFF; --surface2:#FBF6EF; --ink:#2B1219; --muted:#7A5F66; --line:#E4D6C8;
-  --accent:#5C2333; --accent-ink:#FFF4EA; --label:#2323D6; --field:#FFFDFA;
-  --wine:#5C2333; --wine-fg:#F7E9DC; --mint:#6EE3BA; --mint-fg:#0E2A21; --sky:#D3E2F0; --sky-fg:#1C2E42; --lime:#C9DE8D; --lime-fg:#26300F;
-  --good:#17784F; --good-bg:#D8F3E6; --warn:#8F5600; --warn-bg:#FBE7BF; --bad:#B3261E; --bad-bg:#F9D8D4;
-  --chart-line:#5C2333; --chart-area:rgba(110,227,186,.38); --chart-grid:#E4D6C8; --chart-text:#7A5F66;
-  --f-display:"Bricolage Grotesque","Inter",system-ui,sans-serif; --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --bg:#FCFCF4; --surface:#FFFFFF; --surface2:#F6F6E8; --ink:#3A2C20; --muted:#7A6A5B; --line:#E6E1D2;
+  --accent:#54233A; --accent-ink:#FBFFCD; --label:#508348; --field:#FFFFFB;
+  --wine:#54233A; --wine-fg:#FBFFCD; --mint:#C1DC8A; --mint-fg:#26391F; --sky:#D5EAFD; --sky-fg:#22384E; --lime:#F9DDE0; --lime-fg:#54233A;
+  --cafe:#55412F; --cafe-fg:#FBFFCD; --chai:#FBFFCD; --mandarina:#FFAA00;
+  --good:#3F6E38; --good-bg:#E3EFC9; --warn:#8A5300; --warn-bg:#FFEBC2; --bad:#9E2A3A; --bad-bg:#F9DDE0;
+  --chart-line:#54233A; --chart-area:rgba(193,220,138,.45); --chart-grid:#E6E1D2; --chart-text:#7A6A5B;
+  --f-display:"Clash Display","Clash Grotesk","Inter",system-ui,sans-serif; --f-brand:"Panchang","Clash Display","Inter",system-ui,sans-serif;
+  --f-body:"Clash Grotesk","Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-num:"Inter",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#1B0E13; --surface:#2A1720; --surface2:#33202A; --ink:#F6EADF; --muted:#BBA3A9; --line:#46303A;
-  --accent:#EF9FB5; --accent-ink:#2B1219; --label:#9AA6FF; --field:#22121A;
-  --wine:#6E2A3E; --wine-fg:#F7E9DC; --mint:#53D6AB; --mint-fg:#08231A; --sky:#2E4358; --sky-fg:#DCE8F4; --lime:#55662A; --lime-fg:#F0F6D8;
-  --good:#6FE0AE; --good-bg:#16382B; --warn:#F2C566; --warn-bg:#3D2E12; --bad:#FF9D94; --bad-bg:#452020;
-  --chart-line:#EF9FB5; --chart-area:rgba(83,214,171,.25); --chart-grid:#46303A; --chart-text:#BBA3A9; color-scheme:dark}}
+  --bg:#1C1611; --surface:#271F18; --surface2:#30271F; --ink:#F4F2E2; --muted:#B8AC9C; --line:#43382D;
+  --accent:#F9DDE0; --accent-ink:#2A1A10; --label:#A9CF7B; --field:#211A14;
+  --wine:#54233A; --wine-fg:#FBFFCD; --mint:#5E7E3C; --mint-fg:#F4F9E4; --sky:#2E4358; --sky-fg:#D5EAFD; --lime:#5A2E40; --lime-fg:#F9DDE0;
+  --cafe:#55412F; --cafe-fg:#FBFFCD; --chai:#FBFFCD; --mandarina:#FFAA00;
+  --good:#B7DA8C; --good-bg:#26391F; --warn:#FFC85A; --warn-bg:#3D2E12; --bad:#F4A9B6; --bad-bg:#4A2030;
+  --chart-line:#F9DDE0; --chart-area:rgba(169,207,123,.25); --chart-grid:#43382D; --chart-text:#B8AC9C; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#1B0E13; --surface:#2A1720; --surface2:#33202A; --ink:#F6EADF; --muted:#BBA3A9; --line:#46303A;
-  --accent:#EF9FB5; --accent-ink:#2B1219; --label:#9AA6FF; --field:#22121A;
-  --wine:#6E2A3E; --wine-fg:#F7E9DC; --mint:#53D6AB; --mint-fg:#08231A; --sky:#2E4358; --sky-fg:#DCE8F4; --lime:#55662A; --lime-fg:#F0F6D8;
-  --good:#6FE0AE; --good-bg:#16382B; --warn:#F2C566; --warn-bg:#3D2E12; --bad:#FF9D94; --bad-bg:#452020;
-  --chart-line:#EF9FB5; --chart-area:rgba(83,214,171,.25); --chart-grid:#46303A; --chart-text:#BBA3A9; color-scheme:dark}
+  --bg:#1C1611; --surface:#271F18; --surface2:#30271F; --ink:#F4F2E2; --muted:#B8AC9C; --line:#43382D;
+  --accent:#F9DDE0; --accent-ink:#2A1A10; --label:#A9CF7B; --field:#211A14;
+  --wine:#54233A; --wine-fg:#FBFFCD; --mint:#5E7E3C; --mint-fg:#F4F9E4; --sky:#2E4358; --sky-fg:#D5EAFD; --lime:#5A2E40; --lime-fg:#F9DDE0;
+  --cafe:#55412F; --cafe-fg:#FBFFCD; --chai:#FBFFCD; --mandarina:#FFAA00;
+  --good:#B7DA8C; --good-bg:#26391F; --warn:#FFC85A; --warn-bg:#3D2E12; --bad:#F4A9B6; --bad-bg:#4A2030;
+  --chart-line:#F9DDE0; --chart-area:rgba(169,207,123,.25); --chart-grid:#43382D; --chart-text:#B8AC9C; color-scheme:dark}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -36,14 +42,15 @@ button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--label);outline-offset:2px}
 .ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
-.num{font-variant-numeric:tabular-nums}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
 
 /* header */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:10px}
-.brand{display:flex;align-items:center;gap:10px;font:700 20px/1 var(--f-display);letter-spacing:-.01em}
+.brand{display:flex;align-items:center;gap:10px;font:800 17px/1 var(--f-brand);letter-spacing:.01em;text-transform:uppercase;color:var(--wine)}
+.brand>div{color:var(--ink)}
 .brand .logo{width:36px;height:36px;border-radius:10px;background:var(--wine);color:var(--wine-fg);display:grid;place-items:center}
-.brand small{display:block;font:500 11px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.brand small{display:block;font:500 10.5px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .nav{display:flex;gap:4px;overflow-x:auto;flex:1 1 320px;min-width:0;scrollbar-width:none}
 .nav button{border:0;background:none;padding:7px 11px;border-radius:8px;color:var(--muted);font-weight:600;white-space:nowrap}
 .nav button:hover{background:var(--surface2);color:var(--ink)}
@@ -58,9 +65,11 @@ button{cursor:pointer}
 main{display:flex;flex-direction:column;gap:56px;padding-block:28px 64px}
 .eyebrow{font:700 11px/1.2 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--label)}
 h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.015em}
-h2{font-size:clamp(24px,4vw,34px);line-height:1.1;font-weight:700}
-h3{font-size:17px;font-weight:700}
-.sec-h{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+h2{font-size:clamp(20px,2.6vw,24px);line-height:1.2;font-weight:600;letter-spacing:-.005em}
+.sec-h h2{display:flex;align-items:baseline;gap:12px}
+.sec-h h2 .n{font:700 12px/1 var(--f-mono);color:var(--label);letter-spacing:.06em}
+h3{font-size:16px;font-weight:600}
+.sec-h{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--wine)}
 .sec-h p{margin:0;color:var(--muted);max-width:68ch}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
 .grid{display:grid;gap:14px}
@@ -79,7 +88,7 @@ h3{font-size:17px;font-weight:700}
 .kpi{border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .kpi .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .kpi .lab{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.85}
-.kpi .val{font:700 clamp(24px,3vw,32px)/1.05 var(--f-display);letter-spacing:-.02em}
+.kpi .val{font:700 clamp(22px,2.6vw,28px)/1.05 var(--f-num);letter-spacing:-.02em}
 .kpi .sub{font-size:12px;opacity:.85}
 .k-wine{background:var(--wine);color:var(--wine-fg)} .k-mint{background:var(--mint);color:var(--mint-fg)}
 .k-sky{background:var(--sky);color:var(--sky-fg)} .k-lime{background:var(--lime);color:var(--lime-fg)}
@@ -89,7 +98,7 @@ h3{font-size:17px;font-weight:700}
 .stages{grid-template-columns:1.35fr 1fr;align-items:start}
 .stack{display:flex;flex-direction:column;gap:14px;min-width:0}
 .stage header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap}
-.stage .tot{font:700 22px/1 var(--f-display)}
+.stage .tot{font:700 20px/1 var(--f-num)}
 .stage .note{margin:0 0 6px;font-size:12.5px;color:var(--muted)}
 .lines{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .line{display:grid;grid-template-columns:24px minmax(0,1fr) auto auto auto;gap:6px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
@@ -125,7 +134,7 @@ select.in{padding-right:6px}
 .tbl{width:100%;border-collapse:collapse;min-width:640px}
 .tbl th{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
 .tbl th:first-child,.tbl td:first-child{text-align:left}
-.tbl td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;vertical-align:middle}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--f-num);font-size:13.5px;font-variant-numeric:tabular-nums;vertical-align:middle}
 .tbl tr.sel td{background:var(--sky);color:var(--sky-fg)}
 .tbl tr.total td{font-weight:700;border-bottom:0;background:var(--surface2)}
 .tbl .in{width:100%;min-width:90px;text-align:right}
@@ -185,6 +194,44 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 .legendbox{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted)}
 .swatch{display:inline-block;width:28px;height:18px;border-radius:5px;background:var(--field);border:1px solid var(--line);vertical-align:middle;margin-right:6px}
 
+.k-cafe{background:var(--cafe);color:var(--cafe-fg)}
+/* seguimiento */
+:root{--a-din:#508348;--a-tra:#54233A;--a-com:#55412F;--a-ope:#C1DC8A;--a-ven:#FFAA00;--today:#FFAA00}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--a-tra:#B0607E;--a-com:#A88463;--a-din:#7FB070}}
+:root[data-theme="dark"]{--a-tra:#B0607E;--a-com:#A88463;--a-din:#7FB070}
+.gt-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 16px;margin-bottom:10px}
+.gt-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.gt-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.gantt{min-width:880px}
+.g-row{display:grid;grid-template-columns:220px 130px 112px minmax(0,1fr);align-items:center;column-gap:12px;border-top:1px solid var(--line);min-height:44px}
+.g-row.hd{border-top:0;min-height:28px;font:700 10.5px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.g-nm{display:flex;flex-direction:column;min-width:0;padding:6px 0}
+.g-nm b{font-weight:600}
+.g-nm small{font:500 11px/1.3 var(--f-mono);color:var(--muted)}
+.g-nm small.late{color:var(--bad)}
+.g-row.ms .g-nm b{font-weight:700}
+.g-row .in{padding:5px 8px;font-size:13px;width:100%}
+.g-row select.in[data-st="1"]{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.g-row select.in[data-st="2"]{background:var(--good-bg);color:var(--good);border-color:transparent}
+.g-row select.in[data-st="late"]{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.g-tl{position:relative;height:44px;align-self:stretch}
+.g-row.hd .g-tl{height:38px}
+.g-tl .wk{position:absolute;top:0;bottom:0;border-left:1px dashed var(--chart-grid)}
+.g-tl .wl{position:absolute;bottom:6px;transform:translateX(-50%);white-space:nowrap}
+.g-tl .wl.first{transform:none}
+.g-bar{position:absolute;top:14px;height:16px;border-radius:4px;background:var(--c)}
+.g-bar.done{opacity:.35}
+.g-bar.late{box-shadow:0 0 0 2px var(--bad)}
+.g-ms{position:absolute;top:15px;width:14px;height:14px;margin-left:-7px;transform:rotate(45deg);background:var(--c);border-radius:2px}
+.g-ms.done{opacity:.35}
+.g-today{position:absolute;top:0;bottom:0;width:0;border-left:2px solid var(--today);z-index:1}
+.g-row.hd .g-today::after{content:"Hoy";position:absolute;top:0;left:4px;font:700 10px/1 var(--f-mono);color:var(--warn);background:var(--surface);padding:1px 3px}
+details.card>summary{cursor:pointer;font:600 16px/1.3 var(--f-display);list-style-position:outside;margin-left:16px}
+details.card[open]>summary{margin-bottom:12px}
+.qs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.qs ul,.ol{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
+.tbl.txt td{text-align:left;font-family:var(--f-body);font-size:13.5px;vertical-align:top}
+.tbl.txt th{text-align:left}
 .grid>*,.stack>*{min-width:0}
 @media (max-width:860px){.stages,.two{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){
@@ -224,9 +271,9 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 </svg>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><span class="logo"><svg class="ic"><use href="#i-van"/></svg></span><div>Café Frío<small>Combi · plan de inversión</small></div></div>
+  <div class="brand"><span class="logo"><svg class="ic"><use href="#i-van"/></svg></span><div>Café Frío<small>Combi · plan de inversión y arranque</small></div></div>
   <nav class="nav" aria-label="Secciones">
-    <button type="button" data-go="resumen">Resumen</button><button type="button" data-go="inversion">Inversión</button><button type="button" data-go="ventas">Ventas</button><button type="button" data-go="prestamo">Préstamo</button><button type="button" data-go="donde">Dónde</button><button type="button" data-go="pendientes">Pendientes</button>
+    <button type="button" data-go="resumen">Resumen</button><button type="button" data-go="inversion">Inversión</button><button type="button" data-go="ventas">Ventas</button><button type="button" data-go="prestamo">Préstamo</button><button type="button" data-go="donde">Ubicaciones</button><button type="button" data-go="seguimiento">Seguimiento</button><button type="button" data-go="pendientes">Pendientes</button>
   </nav>
   <div class="seg" id="segTop" role="group" aria-label="Escenario de ventas"></div>
   <div class="save" id="save" data-s="local" role="status"><i></i><span>Solo en este dispositivo</span></div>
@@ -236,9 +283,8 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 
 <section id="resumen">
   <div class="sec-h">
-    <span class="eyebrow">Resumen · cifras del PDF de noviembre 2026</span>
-    <h2>¿Vale la pena la combi de <span data-o="combiAmt">$54,000</span>?</h2>
-    <p>Edita cualquier celda con fondo claro y todo se recalcula. Elige un escenario arriba para ver qué pasa si venden más o menos.</p>
+    <h2><span class="n">01</span>Resumen</h2>
+    <p>Combi de <strong class="num" data-o="combiAmt">$54,000</strong>. Cifras de la presentación de noviembre 2026 y del plan de arranque. Las celdas con fondo claro son editables y todo se recalcula; el escenario se elige en la barra superior.</p>
   </div>
   <div class="verdict" id="verdict" data-s="good"><svg class="ic"><use href="#i-trend"/></svg><div><h3 id="vTitle"></h3><p id="vText"></p></div></div>
   <div class="grid kpis" id="kpis"></div>
@@ -247,9 +293,8 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 
 <section id="inversion">
   <div class="sec-h">
-    <span class="eyebrow">Inversión por etapas</span>
-    <h2>Empezar con lo mínimo y sumar imagen después</h2>
-    <p>La etapa 1 se paga con las aportaciones. Las etapas 2 y 3 salen de las primeras ventas. Marca "Pagado" cada gasto que ya hicieron.</p>
+    <h2><span class="n">02</span>Inversión por etapas</h2>
+    <p>La etapa 1 se paga con las aportaciones. El plan de arranque adelanta la pintura (etapa 2) y el vinil (etapa 3) para abrir el 9 de enero con la combi terminada. Marquen "Pagado" cada gasto realizado.</p>
   </div>
   <div class="grid stages">
     <article class="card stage" id="st1">
@@ -257,18 +302,18 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
       <ul class="lines" id="lines1"></ul>
       <button class="add" type="button" data-act="addItem" data-stage="1">+ Agregar gasto a la etapa 1</button>
       <div class="fields" style="margin-top:14px"><label class="wide"><span class="l">Imprevistos sobre la etapa 1 (%)</span><input class="in num" type="number" min="0" max="50" step="1" data-k="imprev" id="f-imprev"></label>
-      <p class="hint wide">El PDF no incluye imprevistos. En un vehículo usado conviene dejar un colchón.</p></div>
+      <p class="hint wide">El PDF no incluye imprevistos. En un vehículo usado conviene dejar un colchón. Los conceptos en $0 están por cotizar (semanas 1 a 3).</p></div>
     </article>
     <div class="stack">
       <article class="card stage on-wine" style="background:var(--wine);color:var(--wine-fg);border-color:transparent">
-        <header><span class="eyebrow" style="color:var(--mint)">Etapa 2 · Mes 1 a 3</span><span class="tot num" data-o="t2"></span></header>
-        <p class="note" style="color:inherit;opacity:.85">Ideal antes de salir. Si no alcanza, se hace con las primeras ventas.</p>
+        <header><span class="eyebrow" style="color:var(--mint)">Etapa 2 · Pintura, antes de abrir</span><span class="tot num" data-o="t2"></span></header>
+        <p class="note" style="color:inherit;opacity:.85">Taller del 30 nov al 13 dic. Si se paga antes de abrir, márquenla como pagada y toda la utilidad extra se destina al préstamo.</p>
         <ul class="lines" id="lines2"></ul>
         <button class="add" type="button" data-act="addItem" data-stage="2" style="color:inherit">+ Agregar gasto</button>
       </article>
       <article class="card stage on-lime" style="background:var(--lime);color:var(--lime-fg);border-color:transparent">
-        <header><span class="eyebrow" style="color:inherit">Etapa 3 · Mes 3 a 6</span><span class="tot num" data-o="t3"></span></header>
-        <p class="note" style="color:inherit;opacity:.85">Pingüinos y detalles de marca.</p>
+        <header><span class="eyebrow" style="color:inherit">Etapa 3 · Imagen, antes de abrir</span><span class="tot num" data-o="t3"></span></header>
+        <p class="note" style="color:inherit;opacity:.85">Vinil, logo y caballete del 21 al 23 dic, después de la pintura.</p>
         <ul class="lines" id="lines3"></ul>
         <button class="add" type="button" data-act="addItem" data-stage="3" style="color:inherit">+ Agregar gasto</button>
       </article>
@@ -282,9 +327,8 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 
 <section id="ventas">
   <div class="sec-h">
-    <span class="eyebrow">ROI realista</span>
-    <h2>Cuánto vende de más que el puesto</h2>
-    <p>Todo se mide contra lo que ya vende el puesto. Lo que cuenta es la utilidad extra después de pagar el gasto extra de la combi.</p>
+    <h2><span class="n">03</span>Ventas y retorno</h2>
+    <p>Todo se mide contra lo que ya vende el puesto: la utilidad extra después de cubrir el gasto extra de operar la combi.</p>
   </div>
   <div class="grid two">
     <div class="card"><h3 style="margin-bottom:12px">Supuestos</h3>
@@ -297,7 +341,7 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
         <label><span class="l">Cobro por evento ($)</span><input class="in num" type="number" min="0" step="100" data-k="evPrice" id="f-evPrice"></label>
         <label><span class="l">Descuento por comisión (%)</span><input class="in num" type="number" min="0" max="20" step="0.1" data-k="fee" id="f-fee"></label>
         <label><span class="l">Ventas nov a feb (% de lo normal)</span><input class="in num" type="number" min="30" max="150" step="5" data-k="winter" id="f-winter"></label>
-        <p class="hint wide">Gasto extra: gasolina, mantenimiento, energía y piso. El descuento por comisión está calibrado para que la tabla coincida con la del PDF. El PDF menciona 80% en invierno, pero su tabla no lo aplica.</p>
+        <p class="hint wide">Gasto extra: gasolina, mantenimiento, energía, piso y, cuando se cotice, el contador mensual. El descuento por comisión está calibrado para que la tabla coincida con la del PDF. El PDF menciona 80% en invierno, pero su tabla no lo aplica.</p>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
         <div style="display:flex;justify-content:space-between"><span class="muted">Margen por vaso</span><strong class="num" data-o="gross"></strong></div>
@@ -328,9 +372,8 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 
 <section id="prestamo">
   <div class="sec-h">
-    <span class="eyebrow">Aportaciones y devolución</span>
-    <h2>Un préstamo de amigos, con reglas claras</h2>
-    <p>Los socios prestan y el negocio sigue siendo de los dueños. Se devuelve lo prestado más el interés pactado, con una parte de la utilidad extra.</p>
+    <h2><span class="n">04</span>Aportaciones y préstamo</h2>
+    <p>El préstamo no da propiedad del negocio. Se devuelve el monto más el interés pactado con una parte fija de la utilidad extra, mediante un pagaré por persona firmado por el titular y dos testigos.</p>
   </div>
   <div class="grid kpis" id="loanKpis" style="margin-bottom:14px"></div>
   <div class="card" style="margin-bottom:14px">
@@ -346,6 +389,28 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
     <div class="tw"><table class="tbl" id="pTbl"><thead><tr><th>Persona</th><th>Tipo</th><th>Aporta</th><th>Recibe en total</th><th>Pago mensual aprox.</th><th>Termina</th><th></th></tr></thead><tbody id="pBody"></tbody><tfoot id="pFoot"></tfoot></table></div>
     <button class="add" type="button" data-act="addPerson">+ Agregar persona</button>
   </div>
+  <div class="grid two" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);margin-bottom:14px">
+    <div class="card"><h3>Contenido del pagaré</h3>
+      <p class="hint" style="margin-top:2px">Uno por persona, firmado por el titular y dos testigos, antes de recibir el dinero (17 al 23 nov).</p>
+      <ul class="ol">
+        <li>Monto prestado y <span class="num" data-o="rateTxt">10%</span> de interés.</li>
+        <li>Se paga con el <span class="num" data-o="shareTxt">50%</span> de la utilidad extra de cada mes, el mismo día, por transferencia con concepto ("Pago 1 de N").</li>
+        <li>Un plazo máximo, aunque las ventas vayan lento.</li>
+        <li>El préstamo no da propiedad del negocio.</li>
+        <li>Si la combi se vende o el negocio cierra, primero se paga a los amigos.</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Cómo cubrir el faltante</h3>
+      <p class="hint" style="margin-top:2px">Para abrir con pintura y vinil hacen falta <strong class="num" data-o="gapOpen"></strong>, a más tardar el 30 nov. De menor a mayor costo:</p>
+      <ol class="ol">
+        <li>Negociar el precio de la combi con lo que encuentre el mecánico.</li>
+        <li>Apartar las ventas del puesto de noviembre y diciembre.</li>
+        <li>Una aportación extra de los dueños.</li>
+        <li>Vender el puesto, como propone la presentación.</li>
+        <li>Pedir más a los amigos, con el mismo interés.</li>
+      </ol>
+    </div>
+  </div>
   <div class="grid two" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <div class="card"><h3 style="margin-bottom:4px">Lo que falta por pagar</h3><div class="legend"><span><i style="background:var(--chart-line)"></i>Préstamo a los amigos</span><span><i style="background:var(--label)"></i>Pintura y detalles</span></div><div id="chBal"></div></div>
     <div class="card"><h3 style="margin-bottom:8px">Mes a mes</h3><div class="tw" style="max-height:340px;overflow-y:auto"><table class="tbl" style="min-width:560px"><thead><tr><th>Mes</th><th>Utilidad extra</th><th>A préstamo</th><th>A pintura y detalles</th><th>Libre</th></tr></thead><tbody id="mBody"></tbody></table></div></div>
@@ -354,25 +419,74 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 
 <section id="donde">
   <div class="sec-h">
-    <span class="eyebrow">Dónde ponernos</span>
-    <h2>Parques, calles y colonias grandes</h2>
-    <p>Ubicaciones a grandes rasgos. Cada punto se valida con el dueño del predio o el organizador antes de contarlo.</p>
+    <h2><span class="n">05</span>Ubicaciones</h2>
+    <p>Un punto cuenta como validado cuando tiene <strong>permiso</strong> (Gobernación o carta del dueño con días y horario), <strong>gente</strong> a la hora de venta (conteo de 15 minutos en dos días distintos) y <strong>lugar</strong> plano, con sombra o resguardo y baño cercano. Cada punto se prueba dos semanas; la meta mínima es 10 vasos más al día que el puesto.</p>
   </div>
   <div class="grid cols3" id="spots"></div>
   <div class="card" style="margin-top:14px"><div class="addrow" style="margin-top:0"><input class="in" type="text" id="spotName" placeholder="Otro lugar para validar" aria-label="Nombre del lugar"><select class="in" id="spotGrp" aria-label="Tipo de lugar"><option value="park">Parque</option><option value="street">Calle concurrida</option><option value="colonia">Colonia</option></select><button class="btn" type="button" data-act="addSpot">Agregar</button></div></div>
 </section>
 
+<section id="seguimiento">
+  <div class="sec-h">
+    <h2><span class="n">06</span>Seguimiento y calendario</h2>
+    <p>Plan semana a semana del 10 de noviembre de 2026 al 9 de enero de 2027. Fechas que no se mueven: pagar la combi a más tardar el 23 de noviembre y entrada al taller de pintura el 30 de noviembre. Asignen un responsable por frente en la primera junta y actualicen el estado cada semana.</p>
+  </div>
+  <div class="grid kpis" id="hitos"></div>
+  <div class="card" style="margin-top:14px">
+    <div class="gt-top"><h3>Calendario de arranque · 20 frentes</h3><span class="num muted" id="fSum"></span></div>
+    <div class="bar" style="margin-bottom:12px"><i id="fBar" style="width:0"></i></div>
+    <div class="gt-leg" id="gLeg" style="margin-bottom:8px"></div>
+    <div class="tw"><div class="gantt" id="gantt"></div></div>
+    <p class="hint" style="margin-top:10px">Si el taller se atrasa, el equipamiento interior y el vinil se recorren una semana y la prueba pasa al 2 de enero. Si el atraso es mayor a una semana, se abre el 9 de enero con la combi limpia, caballete y menú, y se pinta en la primera quincena de enero.</p>
+  </div>
+  <div class="card" style="margin-top:14px"><h3 style="margin-bottom:8px">Riesgos y reglas de decisión</h3>
+    <div class="tw"><table class="tbl txt" style="min-width:620px"><thead><tr><th>Riesgo</th><th>Señal</th><th>Respuesta acordada</th></tr></thead><tbody>
+      <tr><td>Problema mecánico caro</td><td>Óxido estructural o falla de motor en la revisión</td><td>No se compra, o se negocia el precio con la cotización del arreglo</td></tr>
+      <tr><td>Permiso tardado o zona no permitida</td><td>Sin respuesta de Gobernación en la semana 6</td><td>Arrancar en terreno privado con carta del dueño y con eventos privados</td></tr>
+      <tr><td>Ventas bajas</td><td>A los 2 meses, menos de 10 vasos extra al día</td><td>Cambiar de punto o empujar eventos</td></tr>
+      <tr><td>Frío en enero y febrero</td><td>El cold brew baja contra diciembre en el puesto</td><td>Más café caliente y horario de mediodía</td></tr>
+      <tr><td>Utilidad extra negativa</td><td>Dos meses seguidos en números rojos</td><td>Pausar gastos de imagen; el pago a los amigos se alarga sin perderse</td></tr>
+      <tr><td>Falla en día de venta</td><td>La combi no arranca o se va la luz</td><td>Batería cargada y herramienta básica; si no se resuelve, ese día se vende en el puesto</td></tr>
+      <tr><td>Desacuerdo entre socios</td><td>Dudas sobre cuánto se debe o quién decide</td><td>Se resuelve con el acuerdo escrito y la tabla de saldos</td></tr>
+    </tbody></table></div>
+  </div>
+  <details class="card" style="margin-top:14px"><summary>Trámites, costos y requisitos</summary>
+    <div class="tw"><table class="tbl txt" style="min-width:720px"><thead><tr><th>Trámite</th><th>Dónde</th><th>Costo aprox.</th><th>Fechas</th><th>Requisitos y cuidados</th></tr></thead><tbody>
+      <tr><td>Alta o actualización en SAT (RESICO)</td><td>SAT, en línea con e.firma</td><td>Gratis</td><td>10 al 23 nov</td><td>ISR de 1% a 2.5% de lo cobrado. El aviso se presenta dentro del mes siguiente al inicio de actividades.</td></tr>
+      <tr><td>Constancia de manejo higiénico de alimentos</td><td>IMPAS (municipio)</td><td>$550 por persona</td><td>17 al 23 nov</td><td>Una por persona que atienda. Análisis clínicos vigentes e identificación. Se entrega al momento.</td></tr>
+      <tr><td>Permiso de venta en vía pública, semifijo</td><td>Secretaría del Ayuntamiento, Gobernación</td><td>10 UMA al año, ~$1,173</td><td>17 nov al 7 dic</td><td>Identificación, comprobante de domicilio, foto 3.5 × 4 cm y croquis. Con alimentos se tramita a través de IMPAS.</td></tr>
+      <tr><td>Permiso por evento</td><td>Mismo trámite</td><td>8 a 10 UMA, ~$938 a $1,173</td><td>Por evento</td><td>Solo en vía pública. En salón o casa privada lo cubre el organizador.</td></tr>
+      <tr><td>Revisión de Protección Civil</td><td>Protección Civil municipal</td><td>Por confirmar</td><td>21 dic al 4 ene</td><td>Extintor vigente, instalación eléctrica segura y conexión de gas revisada.</td></tr>
+      <tr><td>Cambio de propietario, placas, verificación y seguro</td><td>Recaudación de Rentas y aseguradora</td><td>Incluido en $4,500</td><td>17 al 29 nov</td><td>Seguro con responsabilidad civil para uso comercial y equipo a bordo. Cotizar tres.</td></tr>
+    </tbody></table></div>
+    <p class="hint" style="margin-top:8px">UMA 2026 de $117.31. Las hojas informativas citan tarifas de la Ley de Ingresos 2024: confirmar montos en ventanilla. Todos los trámites van a nombre del mismo titular.</p>
+  </details>
+  <details class="card" style="margin-top:14px"><summary>Preguntas abiertas para Gobernación y para el contador</summary>
+    <div class="qs">
+      <div><strong>Gobernación (primera visita)</strong><ul>
+        <li>¿La combi entra como puesto semifijo o hay categoría para camión de comida?</li>
+        <li>¿En qué zonas no se permite y cuántos puntos ampara un permiso?</li>
+        <li>En terreno privado, ¿basta la carta del dueño o también piden permiso municipal?</li>
+        <li>¿Piden aviso sanitario estatal además de lo de IMPAS?</li></ul></div>
+      <div><strong>Contador (antes de enero)</strong><ul>
+        <li>¿Qué tasa de IVA aplica a bebidas preparadas para llevar?</li>
+        <li>¿Cómo se hace la factura global de ventas al público y quién la emite?</li>
+        <li>¿Qué día vence la declaración mensual y cuánto cobra?</li>
+        <li>¿La combi se registra como activo aunque se compre usada a un particular?</li></ul></div>
+    </div>
+  </details>
+</section>
+
 <section id="pendientes">
   <div class="sec-h">
-    <span class="eyebrow">Antes de comprar y abrir</span>
-    <h2>Pendientes</h2>
-    <p>Lo primero es revisar la combi con un mecánico de VW, confirmar papeles, cotizar la pintura y dejar por escrito cuánto pone cada quien y cómo se devuelve.</p>
+    <h2><span class="n">07</span>Pendientes</h2>
+    <p>Tareas sueltas antes de comprar y abrir. Las tres primeras decisiones bloquean el resto del calendario.</p>
   </div>
   <div class="card"><div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px"><strong>Avance</strong><span class="num" data-o="todoTxt"></span></div><div class="bar" style="margin-bottom:10px"><i id="todoBar" style="width:0"></i></div><div id="todos"></div>
     <div class="addrow"><input class="in" type="text" id="todoName" placeholder="Nuevo pendiente" aria-label="Nuevo pendiente"><button class="btn" type="button" data-act="addTodo">Agregar</button></div></div>
 </section>
 
-<p class="foot">Estimaciones basadas en el PDF "Del puestito a la combi" (noviembre 2026) y en tus datos. Los números se afinan con las ventas reales del puesto. Los montos de permisos y cafetera quedan en cero hasta que los cotices. Propuesta para platicar, no es asesoría legal ni financiera.</p>
+<p class="foot">Fuentes: presentación "Del puestito a la combi" (noviembre 2026), plan de arranque (9 de noviembre de 2026) y hojas informativas del Municipio de Chihuahua. Los números se afinan con las ventas reales del puesto; los conceptos en $0 están por cotizar. Documento de trabajo, no es asesoría legal ni financiera.</p>
 </main></div>
 
 <script>
@@ -396,14 +510,19 @@ var DEF={
  scen:[{n:"Conservador",cups:15,ev:0},{n:"Base",cups:35,ev:1},{n:"Optimista",cups:60,ev:3}],
  rate:10, share:50, startM:1, startY:2027,
  items:[
-  {id:"combi",stage:1,name:"Combi del post",amt:54000,st:0,ic:"van"},
+  {id:"combi",stage:1,name:"Combi del post",amt:54000,st:0,ic:"van",note:"Pagar a más tardar el 23 nov, después de la revisión."},
   {id:"tram",stage:1,name:"Cambio de propietario, placas y seguro",amt:4500,st:0,ic:"file"},
-  {id:"mec",stage:1,name:"Afinación y revisión mecánica",amt:4500,st:0,ic:"wrench"},
+  {id:"mec",stage:1,name:"Afinación y revisión mecánica",amt:4500,st:0,ic:"wrench",note:"Revisión con mecánico de VW antes de pagar."},
   {id:"refri",stage:1,name:"Refri (el que ya vieron)",amt:3000,st:0,ic:"fridge"},
   {id:"inv",stage:1,name:"Inversor + batería o generador chico",amt:6500,st:0,ic:"bolt"},
   {id:"tarja",stage:1,name:"Tarja con bomba para garrafón",amt:2500,st:0,ic:"drop"},
-  {id:"cafe",stage:1,name:"Cafetera para café caliente",amt:0,st:0,ic:"cup",note:"No viene en el PDF. Pon 15,000 si la compran."},
-  {id:"perm",stage:1,name:"Permisos de vía pública, sanidad y Protección Civil",amt:0,st:0,ic:"file",note:"Por cotizar con el Municipio."},
+  {id:"cafe",stage:1,name:"Cafetera para café caliente",amt:0,st:0,ic:"cup",note:"~$15,000, solo si venden café caliente en enero. Revisar los watts contra el inversor."},
+  {id:"perm",stage:1,name:"Permiso de vía pública, semifijo (1 año)",amt:1173,st:0,ic:"file",note:"10 UMA. Confirmar en ventanilla de Gobernación."},
+  {id:"impas",stage:1,name:"Constancias IMPAS de manejo de alimentos (2 personas)",amt:1100,st:0,ic:"file",note:"$550 por persona. Análisis clínicos por cotizar."},
+  {id:"pc",stage:1,name:"Revisión de Protección Civil",amt:0,st:0,ic:"alert",note:"Por cotizar."},
+  {id:"segu",stage:1,name:"Extintor, botiquín, conos y calzas",amt:0,st:0,ic:"alert",note:"Por cotizar."},
+  {id:"impr",stage:1,name:"Impresión: menú, QR y tarjetas de sellos",amt:0,st:0,ic:"file",note:"Por cotizar."},
+  {id:"fondo",stage:1,name:"Fondo de caja",amt:500,st:0,ic:"coin",note:"Se recupera."},
   {id:"pint",stage:2,name:"Pintura dos tonos",amt:18000,st:0,ic:"roller"},
   {id:"ping",stage:3,name:"Vinil de stickers, logo y caballete",amt:9500,st:0,ic:"spark"}
  ],
@@ -419,6 +538,9 @@ var DEF={
   {id:"s9",grp:"colonia",name:"Quintas del Sol",st:0},{id:"s10",grp:"colonia",name:"Villa Juárez",st:0}
  ],
  todo:[
+  {id:"t10",t:"Definir al titular: combi, SAT, cuenta y permisos a su nombre",done:false},
+  {id:"t11",t:"Decidir si venden café caliente en enero (cafetera ~$15,000)",done:false},
+  {id:"t12",t:"Elegir el primer punto de venta, con permiso o carta del dueño",done:false},
   {id:"t1",t:"Revisar la combi con un mecánico de VW",done:false},
   {id:"t2",t:"Confirmar papeles: factura, adeudos y multas",done:false},
   {id:"t3",t:"Cotizar la pintura dos tonos",done:false},
@@ -427,11 +549,52 @@ var DEF={
   {id:"t6",t:"Aviso sanitario y revisión de Protección Civil",done:false},
   {id:"t7",t:"Confirmar si el seguro cubre uso comercial",done:false},
   {id:"t8",t:"Decidir si compran cafetera para café caliente y cotizarla",done:false},
-  {id:"t9",t:"Anotar las ventas actuales del puesto (dato que falta)",done:false}
- ]
+  {id:"t9",t:"Anotar las ventas actuales del puesto (dato que falta)",done:false},
+  {id:"t13",t:"Abrir una cuenta bancaria solo para el negocio",done:false},
+  {id:"t14",t:"Firmar un pagaré con cada amigo que presta",done:false},
+  {id:"t15",t:"Cotizar dos contadores, con precio mensual por escrito",done:false},
+  {id:"t16",t:"Comparar comisiones de Mercado Pago, Clip y el banco (sin renta mensual)",done:false},
+  {id:"t17",t:"Cotizar tres seguros con responsabilidad civil para uso comercial",done:false}
+ ],
+ follow:{}, ver:3
 };
+var AREAS={din:{t:"Decisiones y dinero",c:"var(--a-din)"},tra:{t:"Trámites",c:"var(--a-tra)"},com:{t:"Combi",c:"var(--a-com)"},ope:{t:"Operación",c:"var(--a-ope)"},ven:{t:"Ventas y marketing",c:"var(--a-ven)"}};
+var FR=[
+ {id:"f1",n:"Titular, cafetera y punto",a:"din",s:"2026-11-10",e:"2026-11-16"},
+ {id:"f2",n:"Reunir el faltante",a:"din",s:"2026-11-10",e:"2026-11-29"},
+ {id:"f3",n:"Mecánico y papeles",a:"com",s:"2026-11-10",e:"2026-11-23"},
+ {id:"f4",n:"SAT y cuenta del negocio",a:"din",s:"2026-11-10",e:"2026-11-23"},
+ {id:"f5",n:"Acuerdos con amigos",a:"din",s:"2026-11-17",e:"2026-11-23"},
+ {id:"f6",n:"Pagar la combi",a:"com",s:"2026-11-23",e:"2026-11-23",ms:1},
+ {id:"f7",n:"Constancias IMPAS",a:"tra",s:"2026-11-17",e:"2026-11-23"},
+ {id:"f8",n:"Permiso de vía pública",a:"tra",s:"2026-11-17",e:"2026-12-07"},
+ {id:"f9",n:"Afinación",a:"com",s:"2026-11-24",e:"2026-11-29"},
+ {id:"f10",n:"Hojalatería y pintura",a:"com",s:"2026-11-30",e:"2026-12-13",key:1},
+ {id:"f11",n:"Eléctrico, agua y repisas",a:"com",s:"2026-12-14",e:"2026-12-20"},
+ {id:"f12",n:"Vinil y caballete",a:"com",s:"2026-12-21",e:"2026-12-23"},
+ {id:"f13",n:"Menú, recetas y proveedores",a:"ope",s:"2026-11-24",e:"2026-12-07"},
+ {id:"f14",n:"Caja y cobro con tarjeta",a:"ope",s:"2026-12-14",e:"2026-12-20"},
+ {id:"f15",n:"Protección Civil",a:"tra",s:"2026-12-21",e:"2027-01-04"},
+ {id:"f16",n:"Prueba completa",a:"ope",s:"2026-12-27",e:"2026-12-27",ms:1},
+ {id:"f17",n:"Validar puntos",a:"ven",s:"2026-12-01",e:"2026-12-28"},
+ {id:"f18",n:"Vender eventos privados",a:"ven",s:"2026-12-01",e:"2026-12-31"},
+ {id:"f19",n:"Historia en redes",a:"ven",s:"2026-11-10",e:"2027-01-09"},
+ {id:"f20",n:"Lanzamiento",a:"ven",s:"2027-01-09",e:"2027-01-09",ms:1}
+];
+var HITOS=[
+ {t:"Pagar la combi",d:"2026-11-23",f:"f6",c:"k-wine",ic:"van"},
+ {t:"Entra a pintura",d:"2026-11-30",f:"f10",c:"k-cafe",ic:"roller"},
+ {t:"Prueba completa",d:"2026-12-27",f:"f16",c:"k-sky",ic:"cup"},
+ {t:"Lanzamiento",d:"2027-01-09",f:"f20",c:"k-mint",ic:"spark"}
+];
 var S=JSON.parse(JSON.stringify(DEF)), KEY="cafefrio-combi-v2";
-function merge(src){var o=JSON.parse(JSON.stringify(DEF));if(src&&typeof src==="object"){Object.keys(DEF).forEach(function(k){if(src[k]!==undefined&&src[k]!==null)o[k]=src[k]})}return o}
+function merge(src){var o=JSON.parse(JSON.stringify(DEF));if(src&&typeof src==="object"){Object.keys(DEF).forEach(function(k){if(src[k]!==undefined&&src[k]!==null)o[k]=src[k]})
+  if(!(src.ver>=3)){ // agrega lo nuevo del plan de arranque sin borrar lo que ya editaron
+    var ids={};o.items.forEach(function(i){ids[i.id]=i});
+    DEF.items.forEach(function(d,ix){var cur=ids[d.id];if(!cur){o.items.splice(Math.min(ix,o.items.length),0,JSON.parse(JSON.stringify(d)))}else if(!cur.custom){if(d.id==="perm"&&!num(cur.amt)){cur.amt=d.amt}cur.name=d.name;cur.note=d.note}});
+    var tids={};o.todo.forEach(function(t){tids[t.id]=1});DEF.todo.forEach(function(d){if(!tids[d.id])o.todo.push(JSON.parse(JSON.stringify(d)))});
+    o.ver=3; o.follow=o.follow||{};
+  }}return o}
 try{var raw=localStorage.getItem(KEY);if(raw)S=merge(JSON.parse(raw))}catch(e){}
 
 /* ---------- model ---------- */
@@ -485,11 +648,45 @@ function buildSpots(){
 function buildTodos(){
   $("#todos").innerHTML=S.todo.map(function(t){return '<div class="todo"><input type="checkbox" id="td-'+t.id+'" data-act="todo" data-id="'+t.id+'"'+(t.done?" checked":"")+'><label for="td-'+t.id+'">'+esc(t.t)+'</label><button type="button" class="x" data-act="delTodo" data-id="'+t.id+'" aria-label="Quitar pendiente">'+ic("x")+'</button></div>'}).join("");
 }
+/* ---------- seguimiento ---------- */
+var G0=Date.parse("2026-11-10T00:00:00"), G1=Date.parse("2027-01-12T00:00:00"), DAY=864e5, MESC=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+function dt(iso){return Date.parse(iso+"T00:00:00")}
+function today(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
+function dlab(iso){var d=new Date(dt(iso));return d.getDate()+" "+MESC[d.getMonth()]}
+function pct(t){return Math.max(0,Math.min(100,(t-G0)/(G1-G0)*100))}
+function fst(f){var o=S.follow[f.id]||{};var st=o.st||0;if(st!==2&&dt(f.e)<today())return "late";return st}
+function buildFollow(){
+  $("#gLeg").innerHTML=Object.keys(AREAS).map(function(k){return '<span><i style="background:'+AREAS[k].c+'"></i>'+AREAS[k].t+'</span>'}).join("")+'<span><i style="background:var(--today);width:3px"></i>Hoy</span>';
+  var T=today(), tp=(T>=G0&&T<=G1)?'<span class="g-today" style="left:'+pct(T)+'%"></span>':'', wk="", wl="";
+  for(var t=G0,i=0;t<G1;t+=7*DAY,i++){var d=new Date(t);wk+='<span class="wk" style="left:'+pct(t)+'%"></span>';wl+='<span class="wl'+(i===0?" first":"")+'" style="left:'+pct(t)+'%">'+d.getDate()+" "+MESC[d.getMonth()]+'</span>'}
+  var h='<div class="g-row hd"><span>Frente</span><span>Responsable</span><span>Estado</span><div class="g-tl">'+wk+wl+tp+'</div></div>';
+  FR.forEach(function(f){var o=S.follow[f.id]||{}, st=fst(f), c=AREAS[f.a].c, cls=(st===2?" done":"")+(st==="late"?" late":"");
+    var when=f.ms?dlab(f.s):dlab(f.s)+" – "+dlab(f.e);
+    var mark=f.ms?'<span class="g-ms'+(st===2?" done":"")+'" style="--c:'+c+';left:'+((pct(dt(f.s))+pct(dt(f.s)+DAY))/2)+'%"></span>'
+      :'<span class="g-bar'+cls+'" style="--c:'+c+';left:'+pct(dt(f.s))+'%;width:'+(pct(dt(f.e)+DAY)-pct(dt(f.s)))+'%"></span>';
+    h+='<div class="g-row'+(f.ms||f.key?" ms":"")+'"><div class="g-nm"><b>'+esc(f.n)+'</b><small'+(st==="late"?' class="late"':'')+'>'+when+(st==="late"?" · atrasado":"")+'</small></div>'+
+      '<input class="in" type="text" value="'+esc(o.who||"")+'" placeholder="Asignar" data-fw="'+f.id+'" aria-label="Responsable de '+esc(f.n)+'">'+
+      '<select class="in" data-fs="'+f.id+'" data-st="'+st+'" aria-label="Estado de '+esc(f.n)+'"><option value="0"'+(st===0||st==="late"&&!(o.st)?" selected":"")+'>'+(st==="late"?"Atrasado":"Pendiente")+'</option><option value="1"'+(o.st===1?" selected":"")+'>En curso</option><option value="2"'+(o.st===2?" selected":"")+'>Hecho</option></select>'+
+      '<div class="g-tl">'+wk+tp+mark+'</div></div>'});
+  $("#gantt").innerHTML=h;
+}
+function renderFollow(){
+  var T=today(), done=0, cur=0, late=0;
+  FR.forEach(function(f){var st=fst(f);if(st===2)done++;else if(st==="late")late++;else if(st===1)cur++});
+  $("#fSum").textContent=done+" de "+FR.length+" hechos · "+cur+" en curso · "+late+(late===1?" atrasado":" atrasados");
+  $("#fBar").style.width=(done/FR.length*100)+"%";
+  var open=M.stage1+M.s2+M.s3, gap=open-M.apo;
+  setO("gapOpen",fmt(Math.max(0,gap)));
+  $("#hitos").innerHTML=HITOS.map(function(h){var st=(S.follow[h.f]||{}).st, n=Math.round((dt(h.d)-T)/DAY), sub;
+    if(st===2)sub="Hecho";else if(n>1)sub="En "+n+" días";else if(n===1)sub="Mañana";else if(n===0)sub="Hoy";else sub="Venció hace "+(-n)+(n===-1?" día":" días");
+    return kpi(h.c,h.t,h.ic,dlab(h.d),sub)}).join("")+
+    kpi("k-lime","Por reunir al 30 nov","coin",fmt(Math.max(0,gap)),"Abrir con pintura y vinil: "+fmt(open)+"; aportado "+fmt(M.apo));
+}
 function buildInputs(){
   $$("[data-k]").forEach(function(el){var v=S[el.dataset.k];if(el.tagName==="SELECT")return;el.value=(v===undefined||v===null)?"":v});
   $("#f-startM").innerHTML=MES.map(function(m,i){return '<option value="'+(i+1)+'"'+(S.startM===i+1?" selected":"")+'>'+m+'</option>'}).join("");
 }
-function buildAll(){buildSeg();buildItems();buildScen();buildPeople();buildSpots();buildTodos();buildInputs()}
+function buildAll(){buildSeg();buildItems();buildScen();buildPeople();buildSpots();buildTodos();buildFollow();buildInputs()}
 
 /* ---------- charts ---------- */
 function niceStep(r){if(r<=0)return 1;var p=Math.pow(10,Math.floor(Math.log10(r))),f=r/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
@@ -548,8 +745,8 @@ function render(){
   // verdict
   var v=$("#verdict"), vt, vx, vs;
   if(A.u<=0){vs="bad";vt="Con este escenario no se cubre el gasto extra";vx="La utilidad extra es "+fmt(A.u)+" al mes. Hacen falta al menos "+(eqn===null?"más":f1(eqn))+" vasos extra por día, o eventos."}
-  else if(A.pb<=12){vs="good";vt="Sí conviene: la etapa 1 se recupera en "+months(A.pb);vx="Con "+M.actSc.cups+" vasos extra al día y "+M.actSc.ev+" evento(s) al mes, la utilidad extra es de "+fmt(A.u)+" al mes."}
-  else if(A.pb<=24){vs="warn";vt="Conviene con calma: la etapa 1 se recupera en "+months(A.pb);vx="La utilidad extra es de "+fmt(A.u)+" al mes. Los eventos acortan el plazo."}
+  else if(A.pb<=12){vs="good";vt="Viable: la etapa 1 se recupera en "+months(A.pb);vx="Con "+M.actSc.cups+" vasos extra al día y "+M.actSc.ev+" evento(s) al mes, la utilidad extra es de "+fmt(A.u)+" al mes."}
+  else if(A.pb<=24){vs="warn";vt="Viable a plazo largo: la etapa 1 se recupera en "+months(A.pb);vx="La utilidad extra es de "+fmt(A.u)+" al mes. Los eventos acortan el plazo."}
   else{vs="bad";vt="Se tarda "+months(A.pb)+" en recuperar la etapa 1";vx="Con "+fmt(A.u)+" de utilidad extra al mes el plazo es largo. Conviene empujar eventos o cambiar de punto."}
   v.dataset.s=vs; $("#vTitle").textContent=vt; $("#vText").textContent=vx;
   $("#kpis").innerHTML=
@@ -584,6 +781,8 @@ function render(){
   $("#mBody").innerHTML=M.rows.slice(0,36).map(function(r){return '<tr><td>'+r.label+'</td><td class="'+(r.u<0?"neg":"")+'">'+fmt(r.u)+'</td><td>'+fmt(r.pL)+'</td><td>'+fmt(r.pS)+'</td><td>'+fmt(r.free)+'</td></tr>'}).join("");
   $("#chBal").innerHTML=chartBal();
   // todo
+  setO("rateTxt",f1(S.rate)+"%"); setO("shareTxt",f1(S.share)+"%");
+  renderFollow();
   var d=S.todo.filter(function(t){return t.done}).length; setO("todoTxt",d+" de "+S.todo.length); $("#todoBar").style.width=(S.todo.length?d/S.todo.length*100:0)+"%";
 }
 
@@ -622,12 +821,14 @@ function setPath(el){
   if(el.dataset.k){var k=el.dataset.k;if(k==="current"||k==="actual")S[k]=v===""?"":num(v);else if(k==="startM")S[k]=parseInt(v,10);else S[k]=num(v)}
   else if(el.dataset.item){var it=S.items.filter(function(i){return i.id===el.dataset.item})[0];if(it)it[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
   else if(el.dataset.sc!==undefined){S.scen[+el.dataset.sc][el.dataset.f]=num(v)}
+  else if(el.dataset.fw){var fo=S.follow[el.dataset.fw]=S.follow[el.dataset.fw]||{};fo.who=v}
+  else if(el.dataset.fs){var fs=S.follow[el.dataset.fs]=S.follow[el.dataset.fs]||{};fs.st=parseInt(v,10)||0}
   else if(el.dataset.p){var p=S.people.filter(function(x){return x.id===el.dataset.p})[0];if(p)p[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
   else return false;
   return true;
 }
 document.addEventListener("input",function(e){var el=e.target;if(el.matches("input[type=number],input[type=text]")&&setPath(el))changed()});
-document.addEventListener("change",function(e){var el=e.target;if(el.tagName==="SELECT"&&setPath(el)){if(el.dataset.p){changed()}else changed()}if(el.dataset&&el.dataset.act==="todo"){var t=S.todo.filter(function(x){return x.id===el.dataset.id})[0];if(t){t.done=el.checked;changed()}}});
+document.addEventListener("change",function(e){var el=e.target;if(el.tagName==="SELECT"&&setPath(el)){if(el.dataset.fs)buildFollow();changed()}if(el.dataset&&el.dataset.act==="todo"){var t=S.todo.filter(function(x){return x.id===el.dataset.id})[0];if(t){t.done=el.checked;changed()}}});
 document.addEventListener("click",function(e){
   var go=e.target.closest("[data-go]");if(go){var s=$("#"+go.dataset.go);if(s)s.scrollIntoView({block:"start"});return}
   var b=e.target.closest("[data-act]");if(!b||b.tagName==="INPUT")return;
