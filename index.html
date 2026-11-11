@@ -533,6 +533,8 @@ details.card[open]>summary{margin-bottom:12px}
 <p class="foot">Fuentes: presentación "Del puestito a la combi" (noviembre 2026), plan de arranque (9 de noviembre de 2026) y hojas informativas del Municipio de Chihuahua. Los números se afinan con las ventas reales del puesto; los conceptos en $0 están por cotizar. Documento de trabajo, no es asesoría legal ni financiera.</p>
 </main></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 (function(){
 "use strict";
@@ -881,22 +883,29 @@ function persist(){
 function flush(){
   if(writing){again=true;return}
   writing=true; myRev=uid()+Date.now().toString(36);
-  dbDoc.set({rev:myRev,state:JSON.parse(JSON.stringify(S))}).then(function(){writing=false;if(again){again=false;flush()}else status("ok","Guardado para todos")}).catch(function(e){writing=false;if(e&&e.code==="invalid_argument"){canWrite=false;status("local","Solo en este dispositivo (sin permiso para guardar)")}else status("local","Sin conexión al guardado compartido")});
+  dbDoc.set({rev:myRev,state:JSON.parse(JSON.stringify(S))}).then(function(){writing=false;if(again){again=false;flush()}else status("ok","Guardado para todos")}).catch(function(e){writing=false;if(e&&(e.code==="invalid_argument"||e.code==="permission-denied")){canWrite=false;status("local","Solo en este dispositivo (sin permiso para guardar)")}else status("local","Sin conexión al guardado compartido")});
 }
 function changed(){persist();render()}
+var FIREBASE={apiKey:"AIzaSyD13FQVS_tKEb6JGGT0dHSe1S1tIrkp5pM",authDomain:"cafe-frio-99061.firebaseapp.com",projectId:"cafe-frio-99061",storageBucket:"cafe-frio-99061.firebasestorage.app",messagingSenderId:"252383282811",appId:"1:252383282811:web:ab7c578fd547aa31a604de"};
+function listen(doc){
+  dbDoc=doc; status("busy","Conectando…");
+  var t=setTimeout(function(){status("local","Sin respuesta del guardado compartido")},10000), first=true;
+  dbDoc.onSnapshot(function(snap){
+    if(!snap.metadata.fromCache)clearTimeout(t);
+    var exists=typeof snap.exists==="function"?snap.exists():snap.exists;
+    if(exists){var d=snap.data();
+      if(d&&d.state&&d.rev&&d.rev!==myRev&&!snap.metadata.hasPendingWrites&&Date.now()-lastEdit>2500){S=merge(d.state);myRev=d.rev;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}buildAll();render()}
+      if(!writing&&!snap.metadata.fromCache)status("ok","Guardado para todos")}
+    else if(!snap.metadata.fromCache&&first){first=false;flush()} // primera vez: sube lo que hay en este navegador
+  },function(e){clearTimeout(t);canWrite=false;status("local",e&&e.code==="permission-denied"?"Sin permiso en la base de datos":"Solo en este dispositivo")});
+}
 function startDb(){
-  if(!window.claude||!window.claude.use)return;
-  window.claude.use("db").then(function(db){
-    if(!db)return;
-    dbDoc=db.doc("plan/main"); var t=setTimeout(function(){status("local","Sin respuesta del guardado compartido")},10000);
-    dbDoc.onSnapshot(function(snap){
-      if(!snap.metadata.fromCache)clearTimeout(t);
-      if(snap.exists){var d=snap.data();
-        if(d&&d.state&&d.rev&&d.rev!==myRev&&!snap.metadata.hasPendingWrites&&Date.now()-lastEdit>2500){S=merge(d.state);myRev=d.rev;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}buildAll();render()}
-        if(!writing&&!snap.metadata.fromCache)status("ok","Guardado para todos")}
-      else if(!snap.metadata.fromCache)status("ok","Listo para guardar y compartir");
-    },function(){clearTimeout(t);status("local","Solo en este dispositivo")});
-  }).catch(function(){});
+  if(window.claude&&window.claude.use){window.claude.use("db").then(function(db){if(db)listen(db.doc("plan/main"))}).catch(function(){});return}
+  try{
+    if(!window.firebase||!firebase.firestore){status("local","Solo en este dispositivo (sin conexión a la base)");return}
+    var app=firebase.apps&&firebase.apps.length?firebase.app():firebase.initializeApp(FIREBASE);
+    listen(app.firestore().doc("plan/main"));
+  }catch(e){status("local","Solo en este dispositivo")}
 }
 
 /* ---------- events ---------- */
