@@ -118,6 +118,22 @@ h3{font-size:16px;font-weight:600}
 @media (max-width:560px){.i-edit{grid-template-columns:minmax(0,1fr)}}
 .money{display:flex;align-items:center;background:var(--field);border:1px solid var(--line);border-radius:8px;padding-left:8px;width:112px}
 .money span{color:var(--muted)}
+.money em{display:none}
+.amts{display:flex;gap:8px}
+.amts .money{width:104px}
+.money.cv{border-style:dashed}
+.money.cv.full{background:var(--good-bg);border-color:transparent}
+.money.cv.full input,.money.cv.full span{color:var(--good)}
+.line.hdr{padding:2px 0 6px;border-top:0;font:700 10px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+.line.hdr .amts span{width:104px;text-align:right;padding-right:8px}
+.line.hdr .hst{min-width:84px;text-align:center}
+.line.hdr+.line{border-top:0}
+.line .pill{min-width:84px;text-align:center}
+.cov{margin:2px 0 10px}
+.cov-t{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;margin-bottom:5px;opacity:.9}
+.bar.sm{height:7px}
+.on-wine .bar,.on-lime .bar{background:rgba(255,255,255,.35);border-color:transparent}
+.on-wine .bar>i{background:var(--mint)} .on-lime .bar>i{background:var(--wine)}
 #kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:700px){#kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:420px){#kpis{grid-template-columns:minmax(0,1fr)}}
@@ -266,10 +282,26 @@ details.card[open]>summary{margin-bottom:12px}
 @media (max-width:860px){.stages,.two{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){
   .line{grid-template-columns:24px minmax(0,1fr) auto}
-  .line .money{grid-column:2/3;grid-row:2;width:100%}
+
   .line .pill{grid-column:3;grid-row:2}
   .line .x{grid-column:3;grid-row:1}
   main{gap:44px}
+}
+/* filas apiladas: tarjetas angostas (etapas 2 y 3) y celular */
+.stack .line:not(.hdr){grid-template-columns:24px minmax(0,1fr) auto}
+.stack .line .amts{grid-column:2/3;grid-row:2;min-width:0}
+.stack .line .pill{grid-column:3;grid-row:2}
+.stack .line .x{grid-column:3;grid-row:1}
+.stack .line.hdr{display:none}
+.stack .line .amts .money,.stack .line .amts .money{width:auto;flex:1 1 0;min-width:0;flex-wrap:wrap;padding-top:5px}
+.stack .line .amts .money em{display:block;width:100%;font:600 10px/1 var(--f-mono);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stack .line .amts .money input{flex:1;width:auto}
+@media (max-width:560px){
+  .line .amts{grid-column:2/3;grid-row:2;min-width:0}
+  .line .amts .money{width:auto;flex:1 1 0;min-width:0;flex-wrap:wrap;padding-top:5px}
+  .line .amts .money em{display:block;width:100%;font:600 10px/1 var(--f-mono);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .line .amts .money input{flex:1;width:auto}
+  .line.hdr{display:none}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar>i{transition:none}}
 </style>
@@ -330,6 +362,7 @@ details.card[open]>summary{margin-bottom:12px}
   <div class="grid stages">
     <article class="card stage" id="st1">
       <header><span class="eyebrow">Etapa 1 · Comprar y equipar</span><span class="tot num" data-o="t1"></span></header>
+      <div class="cov"><div class="cov-t"><span>Cubierto</span><span class="num" data-o="c1"></span></div><div class="bar sm" role="progressbar" aria-label="Cubierto de la etapa 1"><i id="cb1" style="width:0"></i></div></div>
       <ul class="lines" id="lines1"></ul>
       <button class="add" type="button" data-act="addItem" data-stage="1">+ Agregar gasto a la etapa 1</button>
       <div class="fields" style="margin-top:14px"><label class="wide"><span class="l">Imprevistos sobre la etapa 1 (%)</span><input class="in num" type="number" min="0" max="50" step="1" data-k="imprev" id="f-imprev"></label>
@@ -338,19 +371,22 @@ details.card[open]>summary{margin-bottom:12px}
     <div class="stack">
       <article class="card stage on-wine" style="background:var(--wine);color:var(--wine-fg);border-color:transparent">
         <header><span class="eyebrow" style="color:var(--mint)">Etapa 2 · Pintura, antes de abrir</span><span class="tot num" data-o="t2"></span></header>
+        <div class="cov"><div class="cov-t"><span>Cubierto</span><span class="num" data-o="c2"></span></div><div class="bar sm" role="progressbar" aria-label="Cubierto de la etapa 2"><i id="cb2" style="width:0"></i></div></div>
         <p class="note" style="color:inherit;opacity:.85">Taller del 30 nov al 13 dic. Si se paga antes de abrir, márquenla como pagada y toda la utilidad extra se destina al préstamo.</p>
         <ul class="lines" id="lines2"></ul>
         <button class="add" type="button" data-act="addItem" data-stage="2" style="color:inherit">+ Agregar gasto</button>
       </article>
       <article class="card stage on-lime" style="background:var(--lime);color:var(--lime-fg);border-color:transparent">
         <header><span class="eyebrow" style="color:inherit">Etapa 3 · Imagen, antes de abrir</span><span class="tot num" data-o="t3"></span></header>
+        <div class="cov"><div class="cov-t"><span>Cubierto</span><span class="num" data-o="c3"></span></div><div class="bar sm" role="progressbar" aria-label="Cubierto de la etapa 3"><i id="cb3" style="width:0"></i></div></div>
         <p class="note" style="color:inherit;opacity:.85">Vinil, logo y caballete del 21 al 23 dic, después de la pintura.</p>
         <ul class="lines" id="lines3"></ul>
         <button class="add" type="button" data-act="addItem" data-stage="3" style="color:inherit">+ Agregar gasto</button>
       </article>
       <article class="card">
-        <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px"><strong>Avance de pagos</strong><span class="num" data-o="paidTxt"></span></div>
-        <div class="bar" role="progressbar" aria-label="Gastos pagados"><i id="paidBar" style="width:0"></i></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap"><strong>Cubierto del costo total</strong><span class="num" data-o="covTxt"></span></div>
+        <div class="bar" role="progressbar" aria-label="Cubierto del costo total"><i id="covBar" style="width:0"></i></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:12.5px;flex-wrap:wrap" class="muted"><span>Falta cubrir <strong class="num" data-o="covGap" style="color:var(--ink)"></strong></span><span class="num" data-o="paidTxt"></span></div>
       </article>
     </div>
   </div>
@@ -652,6 +688,7 @@ function calc(){
   var net=S.price*(1-S.fee/100)-S.cost; M.net=net; M.gross=S.price-S.cost; M.evp=S.evPrice-S.evQty*S.cost;
   var b1=0,tot=0,paid=0,s2=0,s3=0,need=0;
   S.items.forEach(function(i){var a=num(i.amt);tot+=a;if(i.st)paid+=a;if(i.stage===1)b1+=a;if(i.stage===2)s2+=a;if(i.stage===3)s3+=a;if(i.stage>1&&!i.st)need+=a});
+  var cv={1:0,2:0,3:0};S.items.forEach(function(i){cv[i.stage]=(cv[i.stage]||0)+Math.min(num(i.cov),num(i.amt))});M.cov=cv;M.covTot=cv[1]+cv[2]+cv[3];
   M.stage1=b1*(1+S.imprev/100); M.s2=s2; M.s3=s3; M.need23=need; M.allTot=tot; M.paid=paid;
   M.eq=net>0?S.extra/(net*S.days):Infinity;
   M.sc=S.scen.map(function(sc){var u=sc.cups*S.days*net+sc.ev*M.evp-S.extra;return {u:u,sales:sc.cups*S.days*S.price+sc.ev*S.evPrice,pb:u>0?M.stage1/u:Infinity}});
@@ -685,9 +722,10 @@ function itemLi(i){
     '<label>Nota (opcional)<input class="in" type="text" value="'+esc(i.note||"")+'" data-ie="'+i.id+'" data-f="note"></label>'+
     '<label>Etapa<select class="in" data-ie="'+i.id+'" data-f="stage">'+[1,2,3].map(function(k){return '<option value="'+k+'"'+(i.stage===k?" selected":"")+'>'+STG[k]+'</option>'}).join("")+'</select></label>'+
     '<div class="acts"><button type="button" class="btn" data-act="iDone">Listo</button><button type="button" class="del" data-act="delItem" data-id="'+i.id+'">Eliminar</button></div></div>';
-  return '<li class="line'+(iEditing===i.id?" editing":"")+'">'+ic(i.ic||"coin")+'<div class="nm">'+nm+'</div><label class="money"><span>$</span><input type="number" inputmode="numeric" min="0" step="500" value="'+num(i.amt)+'" data-item="'+i.id+'" data-f="amt" aria-label="Monto: '+esc(i.name)+'"></label><button type="button" class="pill" data-act="paid" data-id="'+i.id+'" data-s="'+i.st+'">'+(i.st?"Pagado":"Pendiente")+'</button><button type="button" class="x" data-act="delItem" data-id="'+i.id+'" aria-label="Eliminar gasto">'+ic("x")+'</button>'+ed+'</li>';
+  return '<li class="line'+(iEditing===i.id?" editing":"")+'">'+ic(i.ic||"coin")+'<div class="nm">'+nm+'</div><div class="amts"><label class="money"><em>Costo</em><span>$</span><input type="number" inputmode="numeric" min="0" step="500" value="'+num(i.amt)+'" data-item="'+i.id+'" data-f="amt" aria-label="Costo: '+esc(i.name)+'"></label><label class="money cv'+(num(i.cov)>=num(i.amt)&&num(i.amt)>0?" full":"")+'"><em>Cubierto</em><span>$</span><input type="number" inputmode="numeric" min="0" step="500" value="'+num(i.cov)+'" data-item="'+i.id+'" data-f="cov" aria-label="Cubierto: '+esc(i.name)+'"></label></div><button type="button" class="pill" data-act="paid" data-id="'+i.id+'" data-s="'+i.st+'">'+(i.st?"Pagado":"Pendiente")+'</button><button type="button" class="x" data-act="delItem" data-id="'+i.id+'" aria-label="Eliminar gasto">'+ic("x")+'</button>'+ed+'</li>';
 }
-function buildItems(){[1,2,3].forEach(function(st){$("#lines"+st).innerHTML=S.items.filter(function(i){return i.stage===st}).map(itemLi).join("")})}
+var IHDR='<li class="line hdr" aria-hidden="true"><span></span><span>Concepto</span><div class="amts"><span>Costo</span><span>Cubierto</span></div><span class="hst">Estado</span><span></span></li>';
+function buildItems(){[1,2,3].forEach(function(st){var L=S.items.filter(function(i){return i.stage===st});$("#lines"+st).innerHTML=(L.length?IHDR:"")+L.map(itemLi).join("")})}
 function buildScen(){
   $("#scBody").innerHTML=S.scen.map(function(s,i){return '<tr data-sc="'+i+'"><td><button type="button" class="scbtn" data-act="scen" data-i="'+i+'"><span class="dot"></span>'+esc(s.n)+'</button></td><td><input class="in num" type="number" min="0" step="1" value="'+s.cups+'" data-sc="'+i+'" data-f="cups" aria-label="Vasos extra por día, '+esc(s.n)+'"></td><td><input class="in num" type="number" min="0" step="1" value="'+s.ev+'" data-sc="'+i+'" data-f="ev" aria-label="Eventos por mes, '+esc(s.n)+'"></td><td data-o="sc'+i+'s"></td><td data-o="sc'+i+'u"></td><td data-o="sc'+i+'p"></td></tr>'}).join("");
 }
@@ -825,7 +863,10 @@ function render(){
   var A=M.act, eqn=isFinite(M.eq)?M.eq:null, alarm=eqn===null?10:Math.max(1,Math.round(eqn));
   setO("combiAmt",fmt(num((S.items.filter(function(i){return i.id==="combi"})[0]||{}).amt)));
   setO("t1",fmt(M.stage1)); setO("t2",fmt(M.s2)); setO("t3",fmt(M.s3));
-  setO("paidTxt",fmt(M.paid)+" de "+fmt(M.allTot)); $("#paidBar").style.width=(M.allTot>0?Math.min(100,M.paid/M.allTot*100):0)+"%";
+  setO("paidTxt","Pagado: "+fmt(M.paid));
+  var ctot=M.stage1+M.s2+M.s3, cpc=ctot>0?Math.min(100,M.covTot/ctot*100):0;
+  setO("covTxt",fmt(M.covTot)+" de "+fmt(ctot)+" · "+Math.round(cpc)+"%"); $("#covBar").style.width=cpc+"%"; setO("covGap",fmt(Math.max(0,ctot-M.covTot)));
+  [[1,M.stage1],[2,M.s2],[3,M.s3]].forEach(function(x){var c=M.cov[x[0]]||0,pc=x[1]>0?Math.min(100,c/x[1]*100):0;setO("c"+x[0],fmt(c)+" de "+fmt(x[1])+" · "+Math.round(pc)+"%");$("#cb"+x[0]).style.width=pc+"%"});
   setO("gross",fmt(M.gross)+" por vaso"); setO("net","$"+f1(M.net)+" por vaso"); setO("evp",fmt(M.evp)); setO("alarmN",String(alarm));
   // verdict
   var v=$("#verdict"), vt, vx, vs;
@@ -912,7 +953,7 @@ function startDb(){
 function setPath(el){
   var v=el.value;
   if(el.dataset.k){var k=el.dataset.k;if(k==="current"||k==="actual")S[k]=v===""?"":num(v);else if(k==="startM")S[k]=parseInt(v,10);else S[k]=num(v)}
-  else if(el.dataset.item){var it=S.items.filter(function(i){return i.id===el.dataset.item})[0];if(it)it[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
+  else if(el.dataset.item){var it=S.items.filter(function(i){return i.id===el.dataset.item})[0];if(it){var ff=el.dataset.f;it[ff]=(ff==="amt"||ff==="cov")?num(v):v;var cvl=el.closest(".line")&&el.closest(".line").querySelector(".money.cv");if(cvl)cvl.classList.toggle("full",num(it.cov)>=num(it.amt)&&num(it.amt)>0)}}
   else if(el.dataset.sc!==undefined){S.scen[+el.dataset.sc][el.dataset.f]=num(v)}
   else if(el.dataset.fe&&el.dataset.f==="n"){var fn=S.frentes.filter(function(x){return x.id===el.dataset.fe})[0];if(fn)fn.n=v}
   else if(el.dataset.idea){var id_=S.ideas.filter(function(x){return x.id===el.dataset.idea})[0];if(id_)id_.amt=num(v)}
@@ -942,7 +983,7 @@ document.addEventListener("click",function(e){
   var b=e.target.closest("[data-act]");if(!b||b.tagName==="INPUT")return;
   var a=b.dataset.act,id=b.dataset.id;
   if(a==="scen"){S.scenario=+b.dataset.i;changed()}
-  else if(a==="paid"){var it=S.items.filter(function(i){return i.id===id})[0];it.st=it.st?0:1;buildItems();changed()}
+  else if(a==="paid"){var it=S.items.filter(function(i){return i.id===id})[0];it.st=it.st?0:1;if(it.st)it.cov=num(it.amt);buildItems();changed()}
   else if(a==="addItem"){var ni={id:uid(),stage:+b.dataset.stage,name:"Nuevo gasto",amt:0,st:0,ic:"coin",custom:true};S.items.push(ni);iEditing=ni.id;buildItems();changed();var ie=$("#ie-n");if(ie){ie.focus();ie.select()}}
   else if(a==="iEdit"){iEditing=iEditing===id?null:id;buildItems();var ie2=$("#ie-n");if(ie2)ie2.focus()}
   else if(a==="iDone"){iEditing=null;buildItems()}
