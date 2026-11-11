@@ -208,6 +208,12 @@ tr.sel .dot{border-color:var(--sky-fg);background:var(--sky-fg)}
 .swatch{display:inline-block;width:28px;height:18px;border-radius:5px;background:var(--field);border:1px solid var(--line);vertical-align:middle;margin-right:6px}
 
 .k-cafe{background:var(--cafe);color:var(--cafe-fg)}
+.pill[data-i="1"]{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.pill[data-i="2"]{background:var(--good-bg);color:var(--good);border-color:transparent}
+.pill[data-i="3"]{text-decoration:line-through}
+.line.idea>.ic{color:var(--label)}
+.line.idea .pill{min-width:100px;text-align:center}
+.line.idea.off .i-nm span{color:var(--muted);text-decoration:line-through}
 /* seguimiento */
 :root{--a-din:#508348;--a-tra:#54233A;--a-com:#55412F;--a-ope:#C1DC8A;--a-ven:#FFAA00;--today:#FFAA00}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--a-tra:#B0607E;--a-com:#A88463;--a-din:#7FB070}}
@@ -298,7 +304,7 @@ details.card[open]>summary{margin-bottom:12px}
 <header class="top"><div class="wrap">
   <div class="brand"><span class="logo"><svg class="ic"><use href="#i-van"/></svg></span><div>Café Frío<small>Combi · plan de inversión y arranque</small></div></div>
   <nav class="nav" aria-label="Secciones">
-    <button type="button" data-go="resumen">Resumen</button><button type="button" data-go="inversion">Inversión</button><button type="button" data-go="ventas">Ventas</button><button type="button" data-go="prestamo">Préstamo</button><button type="button" data-go="donde">Ubicaciones</button><button type="button" data-go="seguimiento">Seguimiento</button><button type="button" data-go="pendientes">Pendientes</button>
+    <button type="button" data-go="resumen">Resumen</button><button type="button" data-go="inversion">Inversión</button><button type="button" data-go="ideas">Ideas</button><button type="button" data-go="ventas">Ventas</button><button type="button" data-go="prestamo">Préstamo</button><button type="button" data-go="donde">Ubicaciones</button><button type="button" data-go="seguimiento">Seguimiento</button><button type="button" data-go="pendientes">Pendientes</button>
   </nav>
   <div class="seg" id="segTop" role="group" aria-label="Escenario de ventas"></div>
   <div class="save" id="save" data-s="local" role="status"><i></i><span>Solo en este dispositivo</span></div>
@@ -350,9 +356,21 @@ details.card[open]>summary{margin-bottom:12px}
   </div>
 </section>
 
+<section id="ideas">
+  <div class="sec-h">
+    <h2><span class="n">03</span>Ideas y adicionales</h2>
+    <p>Mejoras, compras opcionales y pendientes de marca que no forman parte de las etapas. No suman a la inversión ni al cálculo de recuperación; cuando una idea se apruebe y tenga presupuesto, se puede pasar a una etapa.</p>
+  </div>
+  <div class="card">
+    <div class="gt-top"><span class="muted" id="ideaSum"></span><span class="gt-leg"><span><span class="pill" data-i="0">Idea</span></span><span><span class="pill" data-i="1">Evaluando</span></span><span><span class="pill" data-i="2">Aprobada</span></span><span><span class="pill" data-i="3">Descartada</span></span><span style="align-self:center">Toca el estado para cambiarlo.</span></span></div>
+    <ul class="lines" id="ideas-list"></ul>
+    <button class="add" type="button" data-act="addIdea">+ Agregar idea</button>
+  </div>
+</section>
+
 <section id="ventas">
   <div class="sec-h">
-    <h2><span class="n">03</span>Ventas y retorno</h2>
+    <h2><span class="n">04</span>Ventas y retorno</h2>
     <p>Todo se mide contra lo que ya vende el puesto: la utilidad extra después de cubrir el gasto extra de operar la combi.</p>
   </div>
   <div class="grid two">
@@ -397,7 +415,7 @@ details.card[open]>summary{margin-bottom:12px}
 
 <section id="prestamo">
   <div class="sec-h">
-    <h2><span class="n">04</span>Aportaciones y préstamo</h2>
+    <h2><span class="n">05</span>Aportaciones y préstamo</h2>
     <p>El préstamo no da propiedad del negocio. Se devuelve el monto más el interés pactado con una parte fija de la utilidad extra, mediante un pagaré por persona firmado por el titular y dos testigos.</p>
   </div>
   <div class="grid kpis" id="loanKpis" style="margin-bottom:14px"></div>
@@ -444,7 +462,7 @@ details.card[open]>summary{margin-bottom:12px}
 
 <section id="donde">
   <div class="sec-h">
-    <h2><span class="n">05</span>Ubicaciones</h2>
+    <h2><span class="n">06</span>Ubicaciones</h2>
     <p>Un punto cuenta como validado cuando tiene <strong>permiso</strong> (Gobernación o carta del dueño con días y horario), <strong>gente</strong> a la hora de venta (conteo de 15 minutos en dos días distintos) y <strong>lugar</strong> plano, con sombra o resguardo y baño cercano. Cada punto se prueba dos semanas; la meta mínima es 10 vasos más al día que el puesto.</p>
   </div>
   <div class="grid cols3" id="spots"></div>
@@ -453,7 +471,7 @@ details.card[open]>summary{margin-bottom:12px}
 
 <section id="seguimiento">
   <div class="sec-h">
-    <h2><span class="n">06</span>Seguimiento y calendario</h2>
+    <h2><span class="n">07</span>Seguimiento y calendario</h2>
     <p>Plan semana a semana del 10 de noviembre de 2026 al 9 de enero de 2027. Fechas que no se mueven: pagar la combi a más tardar el 23 de noviembre y entrada al taller de pintura el 30 de noviembre. Asignen un responsable por frente en la primera junta y actualicen el estado cada semana.</p>
   </div>
   <div class="grid kpis" id="hitos"></div>
@@ -505,7 +523,7 @@ details.card[open]>summary{margin-bottom:12px}
 
 <section id="pendientes">
   <div class="sec-h">
-    <h2><span class="n">07</span>Pendientes</h2>
+    <h2><span class="n">08</span>Pendientes</h2>
     <p>Tareas sueltas antes de comprar y abrir. Las tres primeras decisiones bloquean el resto del calendario.</p>
   </div>
   <div class="card"><div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px"><strong>Avance</strong><span class="num" data-o="todoTxt"></span></div><div class="bar" style="margin-bottom:10px"><i id="todoBar" style="width:0"></i></div><div id="todos"></div>
@@ -582,7 +600,16 @@ var DEF={
   {id:"t16",t:"Comparar comisiones de Mercado Pago, Clip y el banco (sin renta mensual)",done:false},
   {id:"t17",t:"Cotizar tres seguros con responsabilidad civil para uso comercial",done:false}
  ],
- follow:{}, ver:3
+ follow:{}, ver:3,
+ ideas:[
+  {id:"i1",t:"Tarjeta de sellos: 10 sellos = 1 bebida gratis",note:"Promoción de lanzamiento que no regala margen.",amt:0,st:0},
+  {id:"i2",t:"WhatsApp Business con catálogo de bebidas",note:"Estado diario de \"hoy estamos en…\".",amt:0,st:0},
+  {id:"i3",t:"Perfil de Google del negocio con zona de servicio",note:"Gratis.",amt:0,st:0},
+  {id:"i4",t:"Anuncio pequeño en redes la semana del lanzamiento",note:"",amt:0,st:0},
+  {id:"i5",t:"Stickers \"la combi llega en enero\" para el puesto",note:"Con el usuario de redes.",amt:0,st:0},
+  {id:"i6",t:"Playeras con la marca para quien atiende",note:"Aplicación incluida en el brandbook.",amt:0,st:0},
+  {id:"i7",t:"Pingüinos y detalles de marca para la combi",note:"Estaba en la etapa 3 original.",amt:0,st:0}
+ ]
 };
 var AREAS={din:{t:"Decisiones y dinero",c:"var(--a-din)"},tra:{t:"Trámites",c:"var(--a-tra)"},com:{t:"Combi",c:"var(--a-com)"},ope:{t:"Operación",c:"var(--a-ope)"},ven:{t:"Ventas y marketing",c:"var(--a-ven)"}};
 DEF.frentes=[
@@ -727,7 +754,22 @@ function buildInputs(){
   $$("[data-k]").forEach(function(el){var v=S[el.dataset.k];if(el.tagName==="SELECT")return;el.value=(v===undefined||v===null)?"":v});
   $("#f-startM").innerHTML=MES.map(function(m,i){return '<option value="'+(i+1)+'"'+(S.startM===i+1?" selected":"")+'>'+m+'</option>'}).join("");
 }
-function buildAll(){buildSeg();buildItems();buildScen();buildPeople();buildSpots();buildTodos();buildFollow();buildInputs()}
+var IST=["Idea","Evaluando","Aprobada","Descartada"], dEditing=null;
+function buildIdeas(){
+  $("#ideas-list").innerHTML=S.ideas.length?S.ideas.map(function(i){
+    var ed=dEditing!==i.id?'':'<div class="i-edit"><label>Idea<input class="in" type="text" value="'+esc(i.t)+'" data-ide="'+i.id+'" data-f="t" id="id-n"></label>'+
+      '<label>Nota (opcional)<input class="in" type="text" value="'+esc(i.note||"")+'" data-ide="'+i.id+'" data-f="note"></label>'+
+      '<div class="acts" style="grid-column:1/-1"><button type="button" class="btn" data-act="ideaDone">Listo</button><button type="button" class="del" data-act="ideaDel" data-id="'+i.id+'">Eliminar</button></div></div>';
+    return '<li class="line idea'+(i.st===3?" off":"")+'">'+ic("spark")+'<div class="nm"><button type="button" class="i-nm" data-act="ideaEdit" data-id="'+i.id+'" title="Editar idea"><span>'+esc(i.t)+ic("edit")+'</span>'+(i.note?'<small>'+esc(i.note)+'</small>':'')+'</button></div>'+
+      '<label class="money"><span>$</span><input type="number" inputmode="numeric" min="0" step="100" value="'+num(i.amt)+'" data-idea="'+i.id+'" aria-label="Costo estimado: '+esc(i.t)+'"></label>'+
+      '<button type="button" class="pill" data-act="ideaSt" data-id="'+i.id+'" data-i="'+i.st+'">'+IST[i.st]+'</button><button type="button" class="x" data-act="ideaDel" data-id="'+i.id+'" aria-label="Eliminar idea">'+ic("x")+'</button>'+ed+'</li>'}).join("")
+    :'<li class="hint" style="padding:10px 0">Sin ideas todavía.</li>';
+}
+function renderIdeas(){
+  var n=[0,0,0,0], ap=0, ev=0; S.ideas.forEach(function(i){n[i.st]++;if(i.st===2)ap+=num(i.amt);if(i.st===1)ev+=num(i.amt)});
+  $("#ideaSum").textContent=S.ideas.length+(S.ideas.length===1?" idea":" ideas")+" · "+n[2]+" aprobadas por "+fmt(ap)+" · "+n[1]+" en evaluación por "+fmt(ev);
+}
+function buildAll(){buildSeg();buildItems();buildIdeas();buildScen();buildPeople();buildSpots();buildTodos();buildFollow();buildInputs()}
 
 /* ---------- charts ---------- */
 function niceStep(r){if(r<=0)return 1;var p=Math.pow(10,Math.floor(Math.log10(r))),f=r/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
@@ -822,6 +864,7 @@ function render(){
   $("#mBody").innerHTML=M.rows.slice(0,36).map(function(r){return '<tr><td>'+r.label+'</td><td class="'+(r.u<0?"neg":"")+'">'+fmt(r.u)+'</td><td>'+fmt(r.pL)+'</td><td>'+fmt(r.pS)+'</td><td>'+fmt(r.free)+'</td></tr>'}).join("");
   $("#chBal").innerHTML=chartBal();
   // todo
+  renderIdeas();
   setO("rateTxt",f1(S.rate)+"%"); setO("shareTxt",f1(S.share)+"%");
   renderFollow();
   var d=S.todo.filter(function(t){return t.done}).length; setO("todoTxt",d+" de "+S.todo.length); $("#todoBar").style.width=(S.todo.length?d/S.todo.length*100:0)+"%";
@@ -863,6 +906,7 @@ function setPath(el){
   else if(el.dataset.item){var it=S.items.filter(function(i){return i.id===el.dataset.item})[0];if(it)it[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
   else if(el.dataset.sc!==undefined){S.scen[+el.dataset.sc][el.dataset.f]=num(v)}
   else if(el.dataset.fe&&el.dataset.f==="n"){var fn=S.frentes.filter(function(x){return x.id===el.dataset.fe})[0];if(fn)fn.n=v}
+  else if(el.dataset.idea){var id_=S.ideas.filter(function(x){return x.id===el.dataset.idea})[0];if(id_)id_.amt=num(v)}
   else if(el.dataset.fw){var fo=S.follow[el.dataset.fw]=S.follow[el.dataset.fw]||{};fo.who=v}
   else if(el.dataset.fs){var fs=S.follow[el.dataset.fs]=S.follow[el.dataset.fs]||{};fs.st=parseInt(v,10)||0}
   else if(el.dataset.p){var p=S.people.filter(function(x){return x.id===el.dataset.p})[0];if(p)p[el.dataset.f]=el.dataset.f==="amt"?num(v):v}
@@ -870,7 +914,11 @@ function setPath(el){
   return true;
 }
 document.addEventListener("input",function(e){var el=e.target;if(el.matches("input[type=number],input[type=text]")&&setPath(el))changed()});
-document.addEventListener("change",function(e){var el=e.target;if(el.dataset&&el.dataset.ie){var it=S.items.filter(function(x){return x.id===el.dataset.ie})[0];if(!it)return;var fk=el.dataset.f;
+document.addEventListener("change",function(e){var el=e.target;if(el.dataset&&el.dataset.ide){var dd=S.ideas.filter(function(x){return x.id===el.dataset.ide})[0];if(!dd)return;
+    if(el.dataset.f==="t")dd.t=el.value.trim()||"Sin nombre";else dd.note=el.value.trim();
+    var db_=$('.i-nm[data-act="ideaEdit"][data-id="'+dd.id+'"]');if(db_){db_.querySelector("span").firstChild.nodeValue=dd.t;var sm2=db_.querySelector("small");if(dd.note){if(!sm2){sm2=document.createElement("small");db_.appendChild(sm2)}sm2.textContent=dd.note}else if(sm2)sm2.remove()}
+    changed();return}
+  if(el.dataset&&el.dataset.ie){var it=S.items.filter(function(x){return x.id===el.dataset.ie})[0];if(!it)return;var fk=el.dataset.f;
     if(fk==="stage"){it.stage=+el.value;buildItems()}else if(fk==="name"){it.name=el.value.trim()||"Sin nombre"}else it.note=el.value.trim();
     var bt=$('.i-nm[data-id="'+it.id+'"]');if(bt&&fk!=="stage"){bt.querySelector("span").firstChild.nodeValue=it.name;var sm=bt.querySelector("small");if(it.note){if(!sm){sm=document.createElement("small");bt.appendChild(sm)}sm.textContent=it.note}else if(sm)sm.remove()}
     changed();return}
@@ -900,10 +948,16 @@ document.addEventListener("click",function(e){
   else if(a==="fDel"){var fd=S.frentes.filter(function(x){return x.id===id})[0];if(fd&&confirm('¿Eliminar el frente "'+fd.n+'"?')){S.frentes=S.frentes.filter(function(x){return x.id!==id});delete S.follow[id];fEditing=null;buildFollow();changed()}}
   else if(a==="fAdd"){var t0=today(),nf={id:"f"+uid(),n:"Nuevo frente",a:"ope",s:isoOf(t0),e:isoOf(t0+6*DAY),k:0};S.frentes.push(nf);fEditing=nf.id;buildFollow();changed();var ni2=$("#fe-n");if(ni2){ni2.focus();ni2.select()}}
   else if(a==="fSort"){S.frentes.sort(function(x,y){return dt(x.s)-dt(y.s)||dt(x.e)-dt(y.e)});buildFollow();changed()}
+  else if(a==="addIdea"){var nd={id:"i"+uid(),t:"Nueva idea",note:"",amt:0,st:0};S.ideas.push(nd);dEditing=nd.id;buildIdeas();changed();var dn=$("#id-n");if(dn){dn.focus();dn.select()}}
+  else if(a==="ideaEdit"){dEditing=dEditing===id?null:id;buildIdeas();var dn2=$("#id-n");if(dn2)dn2.focus()}
+  else if(a==="ideaDone"){dEditing=null;buildIdeas()}
+  else if(a==="ideaSt"){var is_=S.ideas.filter(function(x){return x.id===id})[0];if(is_){is_.st=(is_.st+1)%4;buildIdeas();changed()}}
+  else if(a==="ideaDel"){var dl=S.ideas.filter(function(x){return x.id===id})[0];if(dl&&confirm('¿Eliminar "'+dl.t+'"?')){S.ideas=S.ideas.filter(function(x){return x.id!==id});dEditing=null;buildIdeas();changed()}}
   else if(a==="delTodo"){S.todo=S.todo.filter(function(t){return t.id!==id});buildTodos();changed()}
   else if(a==="addTodo"){var tn=$("#todoName").value.trim();if(tn){S.todo.push({id:uid(),t:tn,done:false});$("#todoName").value="";buildTodos();changed()}}
 });
 document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="fe-n"){e.preventDefault();e.target.blur();fEditing=null;buildFollow()}
+  if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.ide){e.preventDefault();e.target.blur();dEditing=null;buildIdeas()}
   if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.ie){e.preventDefault();e.target.blur();iEditing=null;buildItems()}});
 ["#spotName","#todoName"].forEach(function(s){$(s).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();$(s==="#spotName"?'[data-act="addSpot"]':'[data-act="addTodo"]').click()}})});
 
